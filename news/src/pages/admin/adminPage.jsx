@@ -1,3 +1,5 @@
+import { Link, Route, Routes } from "react-router-dom";
+
 export default function AdminPage() {
   return (
     <div className="flex h-screen bg-gray-100">
@@ -10,12 +12,12 @@ export default function AdminPage() {
           <button className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
             📊 Dashboard
           </button>
-          <button className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
+          <Link to="/admin/news"  className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
             📰 News
-          </button>
-          <button className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
+          </Link>
+          <Link to ="/admin/Users" className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
             👥 Users
-          </button>
+          </Link>
           <button className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
             ⚙️ Settings
           </button>
@@ -28,11 +30,18 @@ export default function AdminPage() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
+      <div className="flex-1 p-8">
+        
+
+
         <h2 className="text-3xl font-semibold text-gray-800">Welcome, Admin 👋</h2>
         <p className="mt-2 text-gray-600">
           Here you can manage users, news articles, and dashboard stats.
         </p>
+        <Routes path="/*">
+        <Route path="/Users" element={<h1>Users Management</h1>} />
+        <Route path="/news" element={<h1>news Management</h1>} />
+        </Routes>
 
         {/* Example cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -49,7 +58,7 @@ export default function AdminPage() {
             <p className="text-gray-500 mt-2">Track views & likes easily.</p>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
