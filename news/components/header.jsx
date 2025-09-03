@@ -11,7 +11,7 @@ export default function Header() {
 
         {/* Navigation */}
         <nav className="hidden md:flex space-x-6">
-          <Link to="/" className="text-gray-700 hover:text-blue-600">
+          <Link to="/home" className="text-gray-700 hover:text-blue-600">
             Home
           </Link>
           <Link to="/sports" className="text-gray-700 hover:text-blue-600">

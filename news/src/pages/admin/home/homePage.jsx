@@ -5,6 +5,8 @@ import Business from "./business";
 import Entertainment from "./entertainment";
 import Contact from "./contac";
 import About from "./about";
+import ErrorNotFound from "./error";
+import Home from "./home";
 
 export default function HomePage() {
   return (
@@ -18,6 +20,8 @@ export default function HomePage() {
             <Route path="/Entertainment" element={<Entertainment/>} />
             <Route path="/contac" element={<Contact/>} />
             <Route path="/about" element={<About/>} />
+            <Route path="/home" element={<Home/>} />
+            <Route path="/*" element={<ErrorNotFound/>} />
             
             
     </Routes>
