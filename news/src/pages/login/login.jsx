@@ -4,6 +4,9 @@ export default function LoginPage(){
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   useState("");
+  function login(){
+
+  }
   return(
         <section
       className="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-70 bg-blend-overlay"
@@ -20,7 +23,7 @@ export default function LoginPage(){
           Login 
         </h2>
 
-        {/* Form */}
+        
         <form className="space-y-6">
           {/* Email */}
           <div>
@@ -35,7 +38,12 @@ export default function LoginPage(){
               id="email"
               placeholder="Enter your email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none placeholder-gray-500 text-white"
-            />
+              
+              
+              onChange={(e)=>{
+               console.log(e.target.value);
+              }}
+               />
           </div>
 
           {/* Password */}
@@ -51,14 +59,18 @@ export default function LoginPage(){
               id="password"
               placeholder="Enter your password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none placeholder-gray-500 text-white"
-            />
+              
+              onChange={(e)=>{
+               console.log(e.target.value);
+              }}
+              />
           </div>
 
           
           <button
             type="submit"
             className="w-full bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700 transition"
-          >
+             onClick={login}>
             Login
           </button>
         </form>
