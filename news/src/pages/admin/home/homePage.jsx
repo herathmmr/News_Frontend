@@ -11,9 +11,10 @@ export default function HomePage() {
             <Route path="/sports" element={<h1>sport</h1>} />
             <Route path="/Business" element={<h1>Business</h1>} />
             <Route path="/Entertainment" element={<h1>Entertainment</h1>} />
-       
+            <Route path="/contac" element={<h1>contact</h1>} />
             <Route path="/contac" element={<h1>contact</h1>} />
             <Route path="/about" element={<h1>about</h1>} />
+            
             
     </Routes>
 
