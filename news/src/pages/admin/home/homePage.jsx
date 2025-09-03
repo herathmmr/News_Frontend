@@ -1,5 +1,10 @@
 import Header from "../../../../components/header";
 import { Routes, Route } from "react-router-dom";
+import Sport from "./sports";
+import Business from "./business";
+import Entertainment from "./entertainment";
+import Contact from "./contac";
+import About from "./about";
 
 export default function HomePage() {
   return (
@@ -8,12 +13,11 @@ export default function HomePage() {
         <div className="h-[calc(100vh-80px)] w-full bg-red-400">
     <Routes path="/*">
             
-            <Route path="/sports" element={<h1>sport</h1>} />
-            <Route path="/Business" element={<h1>Business</h1>} />
-            <Route path="/Entertainment" element={<h1>Entertainment</h1>} />
-            <Route path="/contac" element={<h1>contact</h1>} />
-            <Route path="/contac" element={<h1>contact</h1>} />
-            <Route path="/about" element={<h1>about</h1>} />
+            <Route path="/sports" element={<Sport/>} />
+            <Route path="/Business" element={<Business/>} />
+            <Route path="/Entertainment" element={<Entertainment/>} />
+            <Route path="/contac" element={<Contact/>} />
+            <Route path="/about" element={<About/>} />
             
             
     </Routes>
