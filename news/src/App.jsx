@@ -4,6 +4,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Testing from '../components/testing';
 import LoginPage from './pages/login/login';
+import { Toaster } from 'react-hot-toast';
 
 
 function App() {
@@ -11,7 +12,9 @@ function App() {
 
   return (
     <BrowserRouter>
+    <Toaster />
       <Routes path="/">
+         
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/*" element={<HomePage/>} />
