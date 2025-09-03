@@ -54,7 +54,7 @@ export default function LoginPage(){
             />
           </div>
 
-          {/* Login Button */}
+          
           <button
             type="submit"
             className="w-full bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700 transition"
