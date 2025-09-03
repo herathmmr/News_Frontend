@@ -1,30 +1,44 @@
-import { use, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 
-export default function LoginPage(){
-  const [email,setEmail]=useState("");
-  const [password,setPassword]=useState("");
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   useState("");
-  function login(){
-    console.log(email,password);
+
+  function login(e) {
+    e.preventDefault();
+    console.log(email, password);
+
+    axios
+      .post("http://localhost:3005/api/users/login", {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-  return(
-        <section
+
+  return (
+    <section
       className="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-70 bg-blend-overlay"
       style={{
-        backgroundImage:
-          "url('/bg1.png')",
+        backgroundImage: "url('/bg1.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className=" rounded-2xl shadow-2xl w-full max-w-md p-8 backdrop-blur-2xl" >
+      <div className=" rounded-2xl shadow-2xl w-full max-w-md p-8 backdrop-blur-2xl">
         {/* Title */}
         <h2 className="text-3xl font-bold text-center text-red-600 mb-6">
-          Login 
+          Login
         </h2>
 
-        
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={login}>
           {/* Email */}
           <div>
             <label
@@ -38,12 +52,11 @@ export default function LoginPage(){
               id="email"
               placeholder="Enter your email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none placeholder-gray-500 text-white"
-              
               value={email}
-              onChange={(e)=>{
+              onChange={(e) => {
                 setEmail(e.target.value);
               }}
-               />
+            />
           </div>
 
           {/* Password */}
@@ -59,19 +72,17 @@ export default function LoginPage(){
               id="password"
               placeholder="Enter your password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none placeholder-gray-500 text-white"
-              
               value={password}
-              onChange={(e)=>{
-               setPassword(e.target.value);
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
-              />
+            />
           </div>
 
-          
           <button
             type="submit"
             className="w-full bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700 transition"
-             onClick={login}>
+          >
             Login
           </button>
         </form>
@@ -87,5 +98,5 @@ export default function LoginPage(){
         </div>
       </div>
     </section>
-    )
+  );
 }
