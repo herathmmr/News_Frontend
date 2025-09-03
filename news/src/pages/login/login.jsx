@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
@@ -19,6 +19,13 @@ export default function LoginPage() {
       .then((res) => {
         console.log(res);
         toast.success("Login Successful");
+        const user = res.data.user;
+        if(user.role =="admin"){
+          window.location.href="/admin"
+        }else{
+          window.location.href="/home"
+        }
+
       })
       .catch((err) => {
         console.log(err);
