@@ -125,7 +125,7 @@ export default function AddNews() {
       {/* Submit Button */}
       <div className="mt-6 text-right">
   <button
-    onClick={() => navigate("/admin/news/add")}
+    onClick={() => navigate("/admin/news")}
     className="bg-gray-400 text-white px-6 py-2 rounded-xl hover:bg-gray-500 transition mr-4"
   >
     Cancel

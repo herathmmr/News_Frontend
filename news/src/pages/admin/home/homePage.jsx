@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <>
         <Header />
-        <div className="h-[calc(100vh-80px)] w-full bg-red-400">
+        <div className="h-[calc(100vh-80px)] w-full">
     <Routes path="/*">
             
             <Route path="/sports" element={<Sport/>} />
