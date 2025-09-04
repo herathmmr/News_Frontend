@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function AddNews() {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
+  const navigate=useNavigate()
   
   const [date, setDate] = useState("");
 
@@ -38,6 +40,9 @@ export default function AddNews() {
 
    console.log(result)
    toast.success("news added successfull")
+   navigate("admin/news")
+
+
    }else{
     toast.error("please login first")
    }
@@ -116,13 +121,20 @@ export default function AddNews() {
 
       {/* Submit Button */}
       <div className="mt-6 text-right">
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
-        >
-          Add News
-        </button>
-      </div>
+  <button
+    onClick={() => navigate("/admin/news/add")}
+    className="bg-gray-400 text-white px-6 py-2 rounded-xl hover:bg-gray-500 transition mr-4"
+  >
+    Cancel
+  </button>
+  <button
+    onClick={handleSubmit}
+    className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
+  >
+    Add News
+  </button>
+</div>
+
     </div>
   );
 }
