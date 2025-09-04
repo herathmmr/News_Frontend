@@ -1,5 +1,42 @@
-export default function Business() {
-  return ( 
-    <div></div>
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import NewsCard from "../../../../components/newsCard";
+
+export default function Sport() {
+  const [state, setState] = useState("loading");
+  const [sportsNews, setSportsNews] = useState([]);
+
+  useEffect(() => {
+    if (state === "loading") {
+      axios
+        .get("http://localhost:3005/api/news")
+        .then((res) => {
+         
+          const filtered = res.data.filter(
+            (article) => article.category === "Business"
+          );
+          setSportsNews(filtered);
+          setState("success");
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Error fetching sports news!");
+          setState("error");
+        });
+    }
+  }, [state]);
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
+      {state === "loading" && <p>Loading business news...</p>}
+      {state === "error" && (
+        <p className="text-red-500">Failed to load sports news.</p>
+      )}
+      {state === "success" &&
+        sportsNews.map((article) => (
+          <NewsCard key={article.id} news={article} />
+        ))}
+    </div>
   );
 }

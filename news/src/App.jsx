@@ -8,10 +8,12 @@ import { Toaster } from 'react-hot-toast';
 import RegisterPage from './pages/register/register';
 
 
+
 function App() {
   
 
   return (
+    <div className="flex flex-col min-h-screen">
     <BrowserRouter>
     <Toaster />
       <Routes path="/">
@@ -22,8 +24,11 @@ function App() {
         <Route path="/*" element={<HomePage/>} />
         <Route path="/testing" element={<Testing/>} />
         
-      </Routes>
+      </Routes> 
     </BrowserRouter>
+   
+    </div>
+    
   );
 }
 
