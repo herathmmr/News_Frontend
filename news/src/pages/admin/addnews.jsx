@@ -7,7 +7,7 @@ export default function AddNews() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [author, setAuthor] = useState("");
+  
   const [date, setDate] = useState("");
 
   async function handleSubmit() {
@@ -16,7 +16,7 @@ export default function AddNews() {
       title,
       content,
       category,
-      author,
+      
       date)
     
   
@@ -28,7 +28,7 @@ export default function AddNews() {
     title :title,
     content : content,
     category :category,
-    author : author,
+    
     date : date
    },{
     headers:{
@@ -46,7 +46,9 @@ export default function AddNews() {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Add News</h2>
-      <p className="text-gray-600">Here you can Add news articles.</p>
+     <p className="text-sm italic text-gray-500 mt-1">
+  Here you can add news articles.
+</p>
 
       <div className="space-y-4">
         {/* ID */}
@@ -98,18 +100,6 @@ export default function AddNews() {
             <option value="Business">Business</option>
             <option value="Entertainment">Entertainment</option>
           </select>
-        </div>
-
-        {/* Author */}
-        <div className="flex justify-between items-center border-b pb-2">
-          <span className="font-medium text-gray-700 w-1/4">Author</span>
-          <input
-            type="text"
-            placeholder="Author Name"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            className="w-3/4 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none"
-          />
         </div>
 
         {/* Date */}
