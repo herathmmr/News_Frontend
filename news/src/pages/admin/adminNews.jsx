@@ -43,14 +43,26 @@ export default function AdminNews() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, []);  //dependencies arr
 
-  function handleDelete(id) {
-    if (window.confirm("Are you sure you want to delete this news article?")) {
-      // Here you can call DELETE API
+async function handleDelete(id) {
+  if (window.confirm("Are you sure you want to delete this news article?")) {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3005/api/news/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      //root
       setNews(news.filter((article) => article.id !== id));
+      window.location.reload();
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete the article. Please try again.");
     }
   }
+}
+
 
   return (
     <div className="w-full h-full p-6">
