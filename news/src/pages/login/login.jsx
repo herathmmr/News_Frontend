@@ -23,7 +23,7 @@ export default function LoginPage() {
         toast.success("Login Successful");
         const user = res.data.user;
 
-        localStorage.set("token",res.data.token)
+        localStorage.setItem("token",res.data.token)
         
         if(user.role =="admin"){
           //window.location.href="/admin"

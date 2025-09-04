@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AddNews() {
   const [id, setId] = useState("");
@@ -8,7 +10,7 @@ export default function AddNews() {
   const [author, setAuthor] = useState("");
   const [date, setDate] = useState("");
 
-  function handleSubmit() {
+  async function handleSubmit() {
     console.log(
       id,
       title,
@@ -18,7 +20,27 @@ export default function AddNews() {
       date)
     
   
-   
+   const token=localStorage.getItem("token")
+   if(token){
+   const result = await axios .post("http://localhost:3005/api/news",{
+    //what should i want 
+    id :id,
+    title :title,
+    content : content,
+    category :category,
+    author : author,
+    date : date
+   },{
+    headers:{
+        Authorization : "Bearer "+token
+    }
+   })
+
+   console.log(result)
+   toast.success("news added successfull")
+   }else{
+    toast.error("please login first")
+   }
   }
 
   return (
