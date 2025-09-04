@@ -16,21 +16,7 @@ export default function ErrorNotFound() {
        
         <p className="text-gray-600 mb-6">
           The page you’re looking for doesn’t exist or has been moved.
-        </p>
-
-      
-        <div className="flex items-center mb-6 border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-          <input
-            type="text"
-            placeholder="Search news..."
-            className="flex-grow px-4 py-2 outline-none"
-          />
-          <button className="bg-red-600 text-white px-4 py-2 hover:bg-red-700 transition">
-            <FaSearch />
-          </button>
-        </div>
-
-       
+        </p>       
         <Link
           to="/home"
           className="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition"

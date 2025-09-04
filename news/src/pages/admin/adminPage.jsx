@@ -1,4 +1,6 @@
 import { Link, Route, Routes } from "react-router-dom";
+import AdminNews from "./adminNews";
+import AddNews from "./addnews";
 
 export default function AdminPage() {
   return (
@@ -23,14 +25,14 @@ export default function AdminPage() {
           </button>
         </nav>
         <div className="p-4 border-t">
-          <button className="w-full text-left text-red-600 hover:text-red-800">
+          <Link to="/login" className="w-full text-left text-red-600 hover:text-red-800">
             🚪 Logout
-          </button>
+          </Link>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 p-8">
+      
+      <div className="flex-1 p-8 h-screen relative">
         
 
 
@@ -39,25 +41,11 @@ export default function AdminPage() {
           Here you can manage users, news articles, and dashboard stats.
         </p>
         <Routes path="/*">
-        <Route path="/Users" element={<h1>Users Management</h1>} />
-        <Route path="/news" element={<h1>news Management</h1>} />
+        <Route path="/Users" element={<h1>user Management</h1>} />
+        <Route path="/news" element={<AdminNews/>} />
+        <Route path="/news/add" element={<AddNews/>} />
         </Routes>
 
-        {/* Example cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <div className="p-6 bg-white shadow-lg rounded-xl">
-            <h3 className="text-xl font-bold text-green-600">Users</h3>
-            <p className="text-gray-500 mt-2">Manage all registered users.</p>
-          </div>
-          <div className="p-6 bg-white shadow-lg rounded-xl">
-            <h3 className="text-xl font-bold text-green-600">News</h3>
-            <p className="text-gray-500 mt-2">Add or update news articles.</p>
-          </div>
-          <div className="p-6 bg-white shadow-lg rounded-xl">
-            <h3 className="text-xl font-bold text-green-600">Analytics</h3>
-            <p className="text-gray-500 mt-2">Track views & likes easily.</p>
-          </div>
-        </div>
       </div>
     </div>
   );
