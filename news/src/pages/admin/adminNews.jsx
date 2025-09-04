@@ -1,13 +1,14 @@
-const samplearr = [];
+//sample arr 
 
 import { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function AdminNews() {
-  const [news, setNews] = useState(samplearr);
+  const [news, setNews] = useState([]);
   const [newsLoaded,setNewsLoaded]= useState(false)
+  const navigate =  useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,9 +28,11 @@ export default function AdminNews() {
 async function handleDelete(id) {
   if (window.confirm("Are you sure you want to delete this news article?")) {
     try {
+
       const token = localStorage.getItem("token");
       await axios.delete(`http://localhost:3005/api/news/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
+
       });
         setNews(news.filter((article) => article.id !== id));
         //window.location.reload();
@@ -61,27 +64,26 @@ async function handleDelete(id) {
             </tr>
           </thead>
           <tbody>
-            {news.map((article) => (
+            {news.map((article,index) => (
               <tr
-                key={article.id}
+                key={article.id} //id = news id
                 className="border-b hover:bg-gray-50 transition"
               >
                 <td className="px-4 py-3">{article.id}</td>
-                <td className="px-4 py-3 font-medium text-gray-800">
-                  {article.title}
-                </td>
+                <td className="px-4 py-3 font-medium text-gray-800">{article.title}</td>
                 <td className="px-4 py-3">{article.category}</td>
                 <td className="px-4 py-3">{article.author}</td>
-                <td className="px-4 py-3">
-                  {new Date(article.date).toLocaleDateString()}
-                </td>
+                <td className="px-4 py-3">{new Date(article.date).toLocaleDateString()} </td>
                 <td className="px-4 py-3 flex justify-center space-x-3">
-                  <Link
-                    to="admin/edit"
+
+                  <button
+                    onClick={()=>{
+                        navigate("/admin/news/edit",{state:article}) //send news details using satate
+                    }}
                     className="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
                   >
                     Edit
-                  </Link>
+                  </button>
                   <button
                     onClick={() => handleDelete(article.id)}
                     className="px-4 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"

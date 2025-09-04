@@ -1,16 +1,19 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState  } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import EditNews from "./editnews";
 
 export default function AddNews() {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
+  const [date, setDate] = useState("");
   const navigate=useNavigate()
   
-  const [date, setDate] = useState("");
+  
+
 
   async function handleSubmit() {
     console.log(
@@ -40,7 +43,7 @@ export default function AddNews() {
 
    console.log(result)
    toast.success("news added successfull")
-   navigate("admin/news")
+   navigate("/admin/news")
 
 
    }else{
