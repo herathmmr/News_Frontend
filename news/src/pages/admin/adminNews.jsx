@@ -1,26 +1,4 @@
-const samplearr = [
-  {
-    id: 1,
-    title: "Sri Lanka Wins Asia Cup 2025",
-    category: "Sports",
-    author: "Sports Desk",
-    date: new Date("2025-08-15"),
-  },
-  {
-    id: 2,
-    title: "Stock Market Hits Record High",
-    category: "Business",
-    author: "Business Insider",
-    date: new Date("2025-08-20"),
-  },
-  {
-    id: 3,
-    title: "New Movie Breaks Box Office Records",
-    category: "Entertainment",
-    author: "Entertainment Today",
-    date: new Date("2025-08-25"),
-  },
-];
+const samplearr = [];
 
 import { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
@@ -99,7 +77,7 @@ async function handleDelete(id) {
                 </td>
                 <td className="px-4 py-3 flex justify-center space-x-3">
                   <Link
-                    to={`/admin/news/edit/${article.id}`}
+                    to="admin/edit"
                     className="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
                   >
                     Edit

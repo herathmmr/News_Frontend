@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from "react-router-dom";
 import AdminNews from "./adminNews";
 import AddNews from "./addnews";
+import EditNews from "./editnews";
 
 export default function AdminPage() {
   return (
@@ -44,6 +45,7 @@ export default function AdminPage() {
         <Route path="/Users" element={<h1>user Management</h1>} />
         <Route path="/news" element={<AdminNews/>} />
         <Route path="/news/add" element={<AddNews/>} />
+        <Route path="/news/edit" element={<EditNews/>} />
         </Routes>
 
       </div>
