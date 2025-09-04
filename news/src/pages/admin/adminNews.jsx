@@ -29,6 +29,7 @@ import axios from "axios";
 
 export default function AdminNews() {
   const [news, setNews] = useState(samplearr);
+  const [newsLoaded,setNewsLoaded]= useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,7 +44,7 @@ export default function AdminNews() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);  //dependencies arr
+  }, [newsLoaded]);  //dependencies arr
 
 async function handleDelete(id) {
   if (window.confirm("Are you sure you want to delete this news article?")) {
@@ -52,10 +53,9 @@ async function handleDelete(id) {
       await axios.delete(`http://localhost:3005/api/news/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      //root
-      setNews(news.filter((article) => article.id !== id));
-      window.location.reload();
+        setNews(news.filter((article) => article.id !== id));
+        //window.location.reload();
+        setNewsLoaded(!newsLoaded);
     } catch (error) {
       console.error("Delete failed:", error);
       alert("Failed to delete the article. Please try again.");
