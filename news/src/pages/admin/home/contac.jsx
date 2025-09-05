@@ -2,8 +2,8 @@ import { FaMapMarkerAlt, FaPhone, FaFax, FaEnvelope } from "react-icons/fa";
 
 export default function Contact() {
   return (
-    <section className="bg-gradient-to-r from-red-50 to-gray-100 py-16 px-6 lg:px-20">
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-10">
+    <section className="  bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 ... py-16 px-6 lg:px-20 ">
+      <div className=" max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-10">
         
         <h2 className="text-3xl font-extrabold text-red-700 mb-8 text-center tracking-wider uppercase">
           Contact Us
@@ -81,9 +81,7 @@ export default function Contact() {
         </div>
 
        
-        <footer className="text-center text-gray-600 mt-8">
-          &copy; 2025 Ada Derana. All rights reserved.
-        </footer>
+       
       </div>
     </section>
   );
