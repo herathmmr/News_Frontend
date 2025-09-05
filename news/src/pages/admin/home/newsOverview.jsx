@@ -8,7 +8,7 @@ export default function NewsOver() {
 
   return (
     
-    <div className="max-w-4xl mx-auto p-6 bg-red-300 rounded-3xl pt-7">
+    <div className=" max-w-2xl mx-auto p-6 bg-white/80 rounded-3xl shadow-lg pb-7 m-8">
     
       <div className="text-sm text-gray-500 mb-4">
         <Link to="/home" className="hover:underline text-red-600">

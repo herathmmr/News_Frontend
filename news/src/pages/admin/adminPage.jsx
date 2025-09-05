@@ -32,7 +32,7 @@ export default function AdminPage() {
       </aside>
 
       
-      <div className="flex-1 p-8 h-screen relative">
+      <div className="flex-1 p-4 sm:p-6 md:p-8 min-h-screen relative bg-gray-50">
         
 
 

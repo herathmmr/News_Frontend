@@ -10,7 +10,9 @@ export default function NewsCard({ news }) {
   };
 
   return (
-    <div className="bg-gradient-to-r from-red-50 to-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-[1.02] duration-300 max-w-sm w-full m-4 flex flex-col justify-between">
+    <div className="bg-gradient-to-r from-red-50 to-gray-100 
+    sm:max-w-sm rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-[1.02] 
+    duration-300 max-w-sm w-full m-4 flex flex-col justify-between">
       <img
         src={news.image || "bg.png"}
         alt={news.title}

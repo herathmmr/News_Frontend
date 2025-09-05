@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <div className="h-[calc(100vh-80px)] w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 ...">
+      <div className="h-full w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 ...">
       
         <Routes>
           <Route path="/sports" element={<Sport />} />

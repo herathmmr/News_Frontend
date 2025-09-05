@@ -28,36 +28,45 @@ export default function AdminUsers() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <h1 className="text-2xl font-semibold mb-4">Admin Users</h1>
 
+      {/* Responsive Wrapper */}
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-200 rounded-lg shadow-sm">
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-100 text-sm sm:text-base">
             <tr>
-              <th className="px-4 py-2 border">#</th>
-              <th className="px-4 py-2 border">First Name</th>
-              <th className="px-4 py-2 border">Last Name</th>
-              <th className="px-4 py-2 border">Email</th>
-              <th className="px-4 py-2 border">Role</th>
-              <th className="px-4 py-2 border">Phone</th>
-              <th className="px-4 py-2 border">Address</th>
+              <th className="px-2 sm:px-4 py-2 border">#</th>
+              <th className="px-2 sm:px-4 py-2 border">First Name</th>
+              <th className="px-2 sm:px-4 py-2 border">Last Name</th>
+              <th className="px-2 sm:px-4 py-2 border">Email</th>
+              <th className="px-2 sm:px-4 py-2 border">Role</th>
+              <th className="px-2 sm:px-4 py-2 border">Phone</th>
+              <th className="px-2 sm:px-4 py-2 border">Address</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-sm sm:text-base">
             {users.length > 0 ? (
               users.map((user, index) => (
                 <tr
                   key={user._id}
                   className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 >
-                  <td className="px-4 py-2 border text-center">{index + 1}</td>
-                  <td className="px-4 py-2 border">{user.firstName}</td>
-                  <td className="px-4 py-2 border">{user.lastName}</td>
-                  <td className="px-4 py-2 border">{user.email}</td>
-                  <td className="px-4 py-2 border capitalize">{user.role}</td>
-                  <td className="px-4 py-2 border">{user.phone}</td>
-                  <td className="px-4 py-2 border">{user.address}</td>
+                  <td className="px-2 sm:px-4 py-2 border text-center">
+                    {index + 1}
+                  </td>
+                  <td className="px-2 sm:px-4 py-2 border">{user.firstName}</td>
+                  <td className="px-2 sm:px-4 py-2 border">{user.lastName}</td>
+                  <td className="px-2 sm:px-4 py-2 border break-words max-w-[150px] sm:max-w-none">
+                    {user.email}
+                  </td>
+                  <td className="px-2 sm:px-4 py-2 border capitalize">
+                    {user.role}
+                  </td>
+                  <td className="px-2 sm:px-4 py-2 border">{user.phone}</td>
+                  <td className="px-2 sm:px-4 py-2 border break-words max-w-[150px] sm:max-w-none">
+                    {user.address}
+                  </td>
                 </tr>
               ))
             ) : (
