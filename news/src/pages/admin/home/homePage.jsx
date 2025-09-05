@@ -24,7 +24,7 @@ export default function HomePage() {
           <Route path="/about" element={<About />} />
           <Route path="/home" element={<Home />} />
           <Route path="/newsov/:id" element={<NewsOver />} />
-          <Route path="/*" element={<ErrorNotFound />} />
+          <Route path="/" element={<ErrorNotFound />} />
         </Routes>
         <Footer />
       </div>

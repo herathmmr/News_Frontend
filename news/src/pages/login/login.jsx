@@ -106,9 +106,7 @@ export default function LoginPage() {
 
         {/* Extra Links */}
         <div className="flex justify-between items-center mt-6 text-sm">
-          <a href="/forgot-password" className="text-red-600 hover:underline">
-            Forgot Password?
-          </a>
+          
           <a href="/register" className="text-gray-200 hover:text-red-600">
             Create Account
           </a>
