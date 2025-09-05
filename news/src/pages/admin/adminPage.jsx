@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import AdminNews from "./adminNews";
 import AddNews from "./addnews";
 import EditNews from "./editnews";
+import AdminUsers from "./adminUsers";
 
 export default function AdminPage() {
   return (
@@ -18,12 +19,10 @@ export default function AdminPage() {
           <Link to="/admin/news"  className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
             📰 News
           </Link>
-          <Link to ="/admin/Users" className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
+          <Link to ="/admin/users" className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
             👥 Users
           </Link>
-          <button className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition">
-            ⚙️ Settings
-          </button>
+          
         </nav>
         <div className="p-4 border-t">
           <Link to="/login" className="w-full text-left text-red-600 hover:text-red-800">
@@ -42,10 +41,11 @@ export default function AdminPage() {
           Here you can manage users, news articles, and dashboard stats.
         </p>
         <Routes path="/*">
-        <Route path="/Users" element={<h1>user Management</h1>} />
+        
         <Route path="/news" element={<AdminNews/>} />
         <Route path="/news/add" element={<AddNews/>} />
         <Route path="/news/edit" element={<EditNews/>} />
+        <Route path="/users" element={<AdminUsers/>} />
         </Routes>
 
       </div>
