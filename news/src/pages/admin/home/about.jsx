@@ -1,7 +1,7 @@
 export default function About() {
   return ( 
-   <section className="bg-gradient-to-r  from-blue-500 via-purple-500 to-pink-500 ... py-16 px-6 lg:px-20">
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-10">
+   <section className="flex flex-col min-h-screen bg-gradient-to-r  from-blue-500 via-purple-500 to-pink-500 ... py-16 px-6 lg:px-20">
+      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-10 ">
        
         <h2 className="text-4xl font-extrabold text-red-700 mb-8 text-center uppercase tracking-wide">
           About Us

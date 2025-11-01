@@ -15,7 +15,7 @@ export default function Footer() {
             About
           </Link>
           <Link
-            to="/contact"
+            to="/contac"
             className="text-gray-600 hover:text-blue-700 text-sm transition-colors duration-200"
           >
             Contact Us

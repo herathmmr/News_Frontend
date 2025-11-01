@@ -26,7 +26,7 @@ export default function LoginPage() {
         localStorage.setItem("token",res.data.token)
         
         if(user.role =="admin"){
-          //window.location.href="/admin"
+          //window  .location.href="/admin"
           navigate("/admin")
         }else{
           //window.location.href="/home"

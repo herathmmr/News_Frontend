@@ -48,6 +48,7 @@ export default function AddNews() {
 
    }else{
     toast.error("please login first")
+    
    }
   }
 
