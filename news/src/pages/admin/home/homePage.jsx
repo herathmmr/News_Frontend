@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "../../../../components/header";
 import { Routes, Route } from "react-router-dom";
 import Sport from "./sports";
@@ -12,10 +13,10 @@ import NewsOver from "./newsOverview";
 
 export default function HomePage() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
       <Header />
-      <div className="flex flex-col min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 ...">
       
+      <main className="flex-1 w-full">
         <Routes>
           <Route path="/sports" element={<Sport />} />
           <Route path="/business" element={<Business />} />
@@ -24,10 +25,12 @@ export default function HomePage() {
           <Route path="/about" element={<About />} />
           <Route path="/home" element={<Home />} />
           <Route path="/newsov/:id" element={<NewsOver />} />
-          <Route path="/" element={<ErrorNotFound />} />
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<ErrorNotFound />} />
         </Routes>
-        <Footer />
-      </div>
-    </>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
