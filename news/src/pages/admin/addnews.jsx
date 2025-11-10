@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState  } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import EditNews from "./editnews";
@@ -10,10 +10,13 @@ export default function AddNews() {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
-  const navigate=useNavigate()
-  
-  
+  const navigate = useNavigate();
 
+  // Auto-select today's date
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    setDate(today);
+  }, []);
 
   async function handleSubmit() {
     console.log(
