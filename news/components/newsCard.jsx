@@ -4,10 +4,27 @@ import { Link } from "react-router-dom";
 
 export default function NewsCard({ news }) {
   const [likes, setLikes] = useState(news.likes || 0);
+  const [loading, setLoading] = useState(false);
 
-  const handleLike = () => {
-    setLikes(likes + 1);
-  };
+  const handleLike = async () => {
+  try {
+    setLoading(true);
+    const res = await fetch(`http://localhost:3005/api/newslike/${news._id}/like`, {
+      method: "PATCH",
+    });
+
+    const data = await res.json();
+    console.log(data); // Log the response data
+
+    if (data.likes !== undefined) {
+      setLikes(data.likes);
+    }
+  } catch (error) {
+    console.error("Like failed:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div
@@ -17,7 +34,7 @@ export default function NewsCard({ news }) {
         transition-all duration-300 max-w-sm w-full m-4 flex flex-col
       "
     >
-      {/* Decorative top bar */}
+      {/* Top bar */}
       <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-600 via-rose-500 to-amber-400"></div>
 
       {/* Image */}
@@ -28,7 +45,7 @@ export default function NewsCard({ news }) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Image overlay gradient */}
+        {/* Gradient overlay */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
 
         {/* Category badge */}
@@ -45,14 +62,14 @@ export default function NewsCard({ news }) {
         {/* Like button */}
         <button
           onClick={handleLike}
+          disabled={loading}
           className="
             absolute top-3 right-3 z-10
             flex items-center gap-1.5 rounded-full
             bg-white/95 border border-gray-200 shadow-sm
             px-3 py-1.5 text-gray-700 hover:text-red-600
-            transition-colors
+            transition-colors disabled:opacity-50
           "
-          aria-label="Like"
         >
           <FaThumbsUp className="text-sm" />
           <span className="text-xs font-medium">{likes}</span>
@@ -84,8 +101,8 @@ export default function NewsCard({ news }) {
           </span>
 
           <Link
-            to={`/newsov/${news.id}`}
-            state={{ news }} // pass whole object
+            to={`/newsov/${news._id}`}
+            state={{ news }}
             className="
               inline-flex items-center justify-center
               bg-red-600 text-white text-sm font-semibold
