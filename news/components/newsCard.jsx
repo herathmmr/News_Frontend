@@ -7,24 +7,31 @@ export default function NewsCard({ news }) {
   const [loading, setLoading] = useState(false);
 
   const handleLike = async () => {
-  try {
-    setLoading(true);
-    const res = await fetch(`http://localhost:3005/api/newslike/${news._id}/like`, {
-      method: "PATCH",
-    });
+    try {
+      setLoading(true);
+     const res = await fetch(`http://localhost:3005/api/newslike/${news._id}/like`, {
+  method: "PATCH",
+  
+});
 
-    const data = await res.json();
-    console.log(data); // Log the response data
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-    if (data.likes !== undefined) {
-      setLikes(data.likes);
+      const data = await res.json();
+      console.log(data); // Log the response data
+
+      if (data.likes !== undefined) {
+        setLikes(data.likes);
+      } else {
+        console.error("Likes not returned in response");
+      }
+    } catch (error) {
+      console.error("Like failed:", error);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Like failed:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div
