@@ -1,21 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaThumbsUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function NewsCard({ news }) {
   const [likes, setLikes] = useState(news.likes || 0);
+  const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const token = localStorage.getItem('token');
+
+  // Fetch like status on component mount
+  useEffect(() => {
+    if (token) {
+      fetchLikeStatus();
+    }
+  }, [news._id]);
+
+  const fetchLikeStatus = async () => {
+    try {
+      const res = await fetch(`http://localhost:3005/api/newslike/${news._id}/like-status`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setLikes(data.likes);
+        setIsLiked(data.isLiked);
+      }
+    } catch (error) {
+      console.error("Error fetching like status:", error);
+    }
+  };
+
   const handleLike = async () => {
+    if (!token) {
+      alert('Please login to like this news');
+      return;
+    }
+
     try {
       setLoading(true);
-     const res = await fetch(`http://localhost:3005/api/newslike/${news._id}/like`, {
-  method: "PATCH",
-  
-});
+      const res = await fetch(`http://localhost:3005/api/newslike/${news._id}/like`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
       if (!res.ok) {
-        throw new Error("Network response was not ok");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Network response was not ok");
       }
 
       const data = await res.json();
@@ -23,11 +59,13 @@ export default function NewsCard({ news }) {
 
       if (data.likes !== undefined) {
         setLikes(data.likes);
+        setIsLiked(data.isLiked);
       } else {
         console.error("Likes not returned in response");
       }
     } catch (error) {
       console.error("Like failed:", error);
+      alert(error.message || 'Failed to like news');
     } finally {
       setLoading(false);
     }
@@ -70,15 +108,19 @@ export default function NewsCard({ news }) {
         <button
           onClick={handleLike}
           disabled={loading}
-          className="
+          className={`
             absolute top-3 right-3 z-10
             flex items-center gap-1.5 rounded-full
-            bg-white/95 border border-gray-200 shadow-sm
-            px-3 py-1.5 text-gray-700 hover:text-red-600
-            transition-colors disabled:opacity-50
-          "
+            bg-white/95 border shadow-sm
+            px-3 py-1.5 transition-all duration-300
+            disabled:opacity-50 disabled:cursor-not-allowed
+            ${isLiked 
+              ? 'border-red-500 text-red-600 bg-red-50' 
+              : 'border-gray-200 text-gray-700 hover:text-red-600 hover:border-red-300'
+            }
+          `}
         >
-          <FaThumbsUp className="text-sm" />
+          <FaThumbsUp className={`text-sm transition-transform ${isLiked ? 'scale-110' : ''}`} />
           <span className="text-xs font-medium">{likes}</span>
         </button>
       </div>
