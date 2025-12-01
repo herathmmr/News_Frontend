@@ -1,13 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle } from "react-icons/fa";
+import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    // Show confirmation dialog
+    const confirmed = window.confirm("Are you sure you want to logout?");
+    
+    if (confirmed) {
+      localStorage.removeItem("token");
+      toast.success("Logged out successfully!");
+      navigate("/");
+      closeMenu();
+    }
+  };
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 w-full">
@@ -46,18 +63,30 @@ export default function Header() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
-            <Link
-              to="/login"
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="px-4 py-2 rounded-lg border-2 border-blue-600 text-blue-600 text-sm font-semibold hover:bg-blue-50 transition"
-            >
-              Register
-            </Link>
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition flex items-center gap-2"
+              >
+                <FaSignOutAlt />
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-2 rounded-lg border-2 border-blue-600 text-blue-600 text-sm font-semibold hover:bg-blue-50 transition"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -168,20 +197,32 @@ export default function Header() {
 
               {/* Mobile Auth Buttons */}
               <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
-                <Link
-                  to="/login"
-                  className="block w-full px-4 py-3 rounded-lg bg-blue-600 text-white text-center font-semibold hover:bg-blue-700 transition"
-                  onClick={closeMenu}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="block w-full px-4 py-3 rounded-lg border-2 border-blue-600 text-blue-600 text-center font-semibold hover:bg-blue-50 transition"
-                  onClick={closeMenu}
-                >
-                  Register
-                </Link>
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-red-600 text-white text-center font-semibold hover:bg-red-700 transition"
+                  >
+                    <FaSignOutAlt />
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="block w-full px-4 py-3 rounded-lg bg-blue-600 text-white text-center font-semibold hover:bg-blue-700 transition"
+                      onClick={closeMenu}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="block w-full px-4 py-3 rounded-lg border-2 border-blue-600 text-blue-600 text-center font-semibold hover:bg-blue-50 transition"
+                      onClick={closeMenu}
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
