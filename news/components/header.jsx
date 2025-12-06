@@ -1,17 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+  const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
 
-  // Check if user is logged in
+  // Check if user is logged in and decode token
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUser(payload);
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
+    }
+  }, []);
+
   const isLoggedIn = localStorage.getItem("token");
 
   const handleLogout = () => {
@@ -20,10 +36,16 @@ export default function Header() {
     
     if (confirmed) {
       localStorage.removeItem("token");
+      setUser(null);
       toast.success("Logged out successfully!");
       navigate("/");
       closeMenu();
+      setIsProfileOpen(false);
     }
+  };
+
+  const getInitials = (firstName, lastName) => {
+    return `${firstName?.charAt(0) || 'U'}${lastName?.charAt(0) || 'S'}`.toUpperCase();
   };
 
   return (
@@ -63,14 +85,95 @@ export default function Header() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
-            {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition flex items-center gap-2"
-              >
-                <FaSignOutAlt />
-                Logout
-              </button>
+            {isLoggedIn && user ? (
+              <div className="relative">
+                <button
+                  onClick={toggleProfile}
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition shadow-md"
+                >
+                  {user.profilePicture ? (
+                    <img
+                      src={user.profilePicture}
+                      alt={user.firstName}
+                      className="w-8 h-8 rounded-full object-cover border-2 border-white"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center text-xs font-bold">
+                      {getInitials(user.firstName, user.lastName)}
+                    </div>
+                  )}
+                  <span className="text-white font-semibold text-sm">
+                    {user.firstName}
+                  </span>
+                  <FaChevronDown className={`text-white text-xs transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Profile Dropdown */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                    {/* Profile Header */}
+                    <div className="px-4 py-3 border-b border-gray-200">
+                      <div className="flex items-center gap-3">
+                        {user.profilePicture ? (
+                          <img
+                            src={user.profilePicture}
+                            alt={user.firstName}
+                            className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center text-lg font-bold">
+                            {getInitials(user.firstName, user.lastName)}
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <h3 className="font-bold text-gray-800">
+                            {user.firstName} {user.lastName}
+                          </h3>
+                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                            user.role === "admin" 
+                              ? "bg-green-100 text-green-700" 
+                              : "bg-blue-100 text-blue-700"
+                          }`}>
+                            {user.role}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Menu Items */}
+                    <div className="py-1">
+                      {user.role === "admin" && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition text-sm font-medium"
+                        >
+                          📊 Admin Panel
+                        </Link>
+                      )}
+                      <Link
+                        to="/home"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition text-sm font-medium"
+                      >
+                        🏠 My News Feed
+                      </Link>
+                    </div>
+
+                    {/* Logout Button */}
+                    <div className="pt-2 border-t border-gray-200">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full px-4 py-2 text-red-600 hover:bg-red-50 transition text-sm font-semibold flex items-center justify-center gap-2"
+                      >
+                        <FaSignOutAlt />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link
@@ -123,6 +226,38 @@ export default function Header() {
                   <HiX size={24} />
                 </button>
               </div>
+
+              {/* User Profile Section (Mobile) */}
+              {isLoggedIn && user && (
+                <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    {user.profilePicture ? (
+                      <img
+                        src={user.profilePicture}
+                        alt={user.firstName}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center text-lg font-bold">
+                        {getInitials(user.firstName, user.lastName)}
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-800 text-sm">
+                        {user.firstName} {user.lastName}
+                      </h3>
+                      <p className="text-xs text-gray-600">{user.email}</p>
+                    </div>
+                  </div>
+                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+                    user.role === "admin" 
+                      ? "bg-green-100 text-green-700" 
+                      : "bg-blue-100 text-blue-700"
+                  }`}>
+                    {user.role}
+                  </span>
+                </div>
+              )}
 
               {/* Navigation */}
               <nav className="space-y-2">
@@ -197,14 +332,25 @@ export default function Header() {
 
               {/* Mobile Auth Buttons */}
               <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
-                {isLoggedIn ? (
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-red-600 text-white text-center font-semibold hover:bg-red-700 transition"
-                  >
-                    <FaSignOutAlt />
-                    Logout
-                  </button>
+                {isLoggedIn && user ? (
+                  <>
+                    {user.role === "admin" && (
+                      <Link
+                        to="/admin"
+                        onClick={closeMenu}
+                        className="block w-full px-4 py-3 rounded-lg bg-green-600 text-white text-center font-semibold hover:bg-green-700 transition"
+                      >
+                        📊 Admin Panel
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-red-600 text-white text-center font-semibold hover:bg-red-700 transition"
+                    >
+                      <FaSignOutAlt />
+                      Logout
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Link
