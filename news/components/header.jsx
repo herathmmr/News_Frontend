@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
@@ -10,6 +10,8 @@ export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const profileRef = useRef(null);
+  const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -47,6 +49,31 @@ export default function Header() {
   const getInitials = (firstName, lastName) => {
     return `${firstName?.charAt(0) || 'U'}${lastName?.charAt(0) || 'S'}`.toUpperCase();
   };
+
+  useEffect(() => {
+    if (!isProfileOpen) return;
+
+    const handleOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    const handleScroll = () => setIsProfileOpen(false);
+
+    document.addEventListener("mousedown", handleOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isProfileOpen]);
+
+  // Close profile on route change
+  useEffect(() => {
+    setIsProfileOpen(false);
+  }, [location.pathname]);
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 w-full">
@@ -86,7 +113,7 @@ export default function Header() {
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             {isLoggedIn && user ? (
-              <div className="relative">
+              <div className="relative" ref={profileRef}>
                 <button
                   onClick={toggleProfile}
                   className="flex items-center gap-2 px-3 py-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition shadow-md"
