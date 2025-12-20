@@ -9,6 +9,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const profileRef = useRef(null);
   const location = useLocation();
@@ -33,17 +34,17 @@ export default function Header() {
   const isLoggedIn = localStorage.getItem("token");
 
   const handleLogout = () => {
-    // Show confirmation dialog
-    const confirmed = window.confirm("Are you sure you want to logout?");
-    
-    if (confirmed) {
-      localStorage.removeItem("token");
-      setUser(null);
-      toast.success("Logged out successfully!");
-      navigate("/");
-      closeMenu();
-      setIsProfileOpen(false);
-    }
+    setShowLogoutModal(true);
+    setIsProfileOpen(false);
+  };
+
+  const confirmLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setShowLogoutModal(false);
+    toast.success("Logged out successfully!");
+    navigate("/");
+    closeMenu();
   };
 
   const getInitials = (firstName, lastName) => {
@@ -400,6 +401,54 @@ export default function Header() {
             </div>
           </div>
         </>
+      )}
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+            onClick={() => setShowLogoutModal(false)}
+          ></div>
+
+          {/* Modal */}
+          <div className="relative z-10 w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden animate-[fadeIn_0.2s_ease-out]">
+            {/* Header gradient */}
+            <div className="h-2 bg-gradient-to-r from-red-500 via-orange-500 to-red-600"></div>
+
+            <div className="p-6 sm:p-8 text-center">
+              {/* Icon */}
+              <div className="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-red-50">
+                <FaSignOutAlt className="w-7 h-7 text-red-500" />
+              </div>
+
+              {/* Title */}
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Confirm Logout</h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Are you sure you want to sign out of your account?
+              </p>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={confirmLogout}
+                  className="inline-flex items-center justify-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition-all shadow-md hover:shadow-lg"
+                >
+                  <FaSignOutAlt className="text-sm" />
+                  Yes, Logout
+                </button>
+
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="inline-flex items-center justify-center bg-gray-100 text-gray-700 px-5 py-2.5 rounded-lg font-semibold hover:bg-gray-200 transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </header>
   );

@@ -111,6 +111,8 @@ const location =useLocation() //get values
             <option value="Sports">Sports</option>
             <option value="Business">Business</option>
             <option value="Entertainment">Entertainment</option>
+            <option value="Politics">Politics</option>
+            <option value="Technology">Technology</option>
           </select>
         </div>
 

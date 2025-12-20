@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { FaThumbsUp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function NewsCard({ news }) {
   const [likes, setLikes] = useState(news.likes || 0);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
 
@@ -36,7 +39,7 @@ export default function NewsCard({ news }) {
 
   const handleLike = async () => {
     if (!token) {
-      alert('Please login to like this news');
+      setShowLoginModal(true);
       return;
     }
 
@@ -72,7 +75,40 @@ export default function NewsCard({ news }) {
   };
 
   return (
-    <div
+    <>
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowLoginModal(false)}></div>
+
+          <div className="relative z-10 max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden mx-auto">
+            <div className="p-6 sm:p-8 text-center">
+              <div className="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-red-50 text-red-600">
+                <FaThumbsUp className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Please sign in to like</h3>
+              <p className="text-sm text-slate-500 mb-6 px-2">You need an account to like articles. Sign in to save favorites and interact with content.</p>
+
+              <div className="flex gap-3 justify-center px-2">
+                <button
+                  onClick={() => { setShowLoginModal(false); navigate('/login'); }}
+                  className="inline-flex items-center justify-center bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+                >
+                  Sign in
+                </button>
+
+                <button
+                  onClick={() => setShowLoginModal(false)}
+                  className="inline-flex items-center justify-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div
       className="
         group relative overflow-hidden rounded-2xl bg-white
         border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-0.5
@@ -164,5 +200,6 @@ export default function NewsCard({ news }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
