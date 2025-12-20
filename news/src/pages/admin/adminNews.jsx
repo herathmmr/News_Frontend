@@ -30,7 +30,7 @@ export default function AdminNews() {
         await axios.delete(`http://localhost:3005/api/news/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setNews(news.filter((article) => article.id !== id));
+        setNews(news.filter((article) => article._id !== id));
         setNewsLoaded(!newsLoaded);
       } catch (error) {
         console.error("Delete failed:", error);
@@ -62,7 +62,7 @@ export default function AdminNews() {
             <tbody>
               {news.map((article) => (
                 <tr
-                  key={article.id}
+                  key={article._id}
                   className="border-b hover:bg-gray-50 transition"
                 >
                   <td className="px-4 py-3">{article.id}</td>
@@ -84,7 +84,7 @@ export default function AdminNews() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(article.id)}
+                      onClick={() => handleDelete(article._id)}
                       className="px-4 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                     >
                       Delete
@@ -100,7 +100,7 @@ export default function AdminNews() {
         <div className="lg:hidden space-y-4">
           {news.map((article) => (
             <div
-              key={article.id}
+              key={article._id}
               className="bg-white rounded-lg shadow-md p-4 sm:p-5 border border-gray-200"
             >
               {/* Header */}
@@ -139,7 +139,7 @@ export default function AdminNews() {
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(article.id)}
+                  onClick={() => handleDelete(article._id)}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
                 >
                   Delete

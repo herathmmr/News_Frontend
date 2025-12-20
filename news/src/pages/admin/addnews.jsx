@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import EditNews from "./editnews";
+import { useNavigate } from "react-router-dom";
+import { FiUploadCloud, FiX } from "react-icons/fi";
 
 export default function AddNews() {
   const [id, setId] = useState("");
@@ -10,6 +10,9 @@ export default function AddNews() {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
   // Auto-select today's date
@@ -18,41 +21,55 @@ export default function AddNews() {
     setDate(today);
   }, []);
 
-  async function handleSubmit() {
-    console.log(
-      id,
-      title,
-      content,
-      category,
-      
-      date)
-    
-  
-   const token=localStorage.getItem("token")
-   if(token){
-   const result = await axios .post("http://localhost:3005/api/news",{
-    //what should i want 
-    id :id,
-    title :title,
-    content : content,
-    category :category,
-    
-    date : date
-   },{
-    headers:{
-        Authorization : "Bearer "+token
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
-   })
+  };
 
-   console.log(result)
-   toast.success("news added successfull")
-   navigate("/admin/news")
+  const removeImage = () => {
+    setImage(null);
+    setImagePreview(null);
+  };
 
+  async function handleSubmit() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login first");
+      return;
+    }
 
-   }else{
-    toast.error("please login first")
-    
-   }
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("category", category);
+      formData.append("date", date);
+      if (image) {
+        formData.append("image", image);
+      }
+
+      const result = await axios.post("http://localhost:3005/api/news", formData, {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(result);
+      toast.success("News added successfully");
+      navigate("/admin/news");
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to add news");
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -116,6 +133,41 @@ export default function AddNews() {
           </select>
         </div>
 
+        {/* Image Upload */}
+        <div className="flex justify-between items-start border-b pb-4">
+          <span className="font-medium text-gray-700 w-1/4">Image</span>
+          <div className="w-3/4">
+            {imagePreview ? (
+              <div className="relative inline-block">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-40 h-28 object-cover rounded-lg border-2 border-blue-200 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition shadow-md"
+                >
+                  <FiX size={16} />
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition">
+                <FiUploadCloud className="text-3xl text-gray-400 mb-2" />
+                <span className="text-sm text-gray-500">Click to upload image</span>
+                <span className="text-xs text-gray-400 mt-1">PNG, JPG up to 5MB</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
+        </div>
+
         {/* Date */}
         <div className="flex justify-between items-center border-b pb-2">
           <span className="font-medium text-gray-700 w-1/4">Date</span>
@@ -138,9 +190,10 @@ export default function AddNews() {
   </button>
   <button
     onClick={handleSubmit}
-    className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
+    disabled={uploading}
+    className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    Add News
+    {uploading ? "Uploading..." : "Add News"}
   </button>
 </div>
 
