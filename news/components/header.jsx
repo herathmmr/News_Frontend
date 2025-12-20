@@ -1,22 +1,37 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt, FaNewspaper, FaLandmark, FaLaptop } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNewsDropdownOpen, setIsNewsDropdownOpen] = useState(false);
+  const [isMobileNewsOpen, setIsMobileNewsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const profileRef = useRef(null);
+  const newsDropdownRef = useRef(null);
   const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setIsMobileNewsOpen(false);
+  };
   const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
+  const toggleNewsDropdown = () => setIsNewsDropdownOpen(!isNewsDropdownOpen);
+
+  const newsCategories = [
+    { name: "Sports", path: "/sports", icon: FaFootballBall, color: "text-green-500" },
+    { name: "Business", path: "/business", icon: FaBriefcase, color: "text-blue-500" },
+    { name: "Entertainment", path: "/entertainment", icon: FaFilm, color: "text-purple-500" },
+    { name: "Politics", path: "/politics", icon: FaLandmark, color: "text-red-500" },
+    { name: "Technology", path: "/technology", icon: FaLaptop, color: "text-cyan-500" },
+  ];
 
   // Check if user is logged in and decode token
   useEffect(() => {
@@ -74,7 +89,29 @@ export default function Header() {
   // Close profile on route change
   useEffect(() => {
     setIsProfileOpen(false);
+    setIsNewsDropdownOpen(false);
   }, [location.pathname]);
+
+  // Close news dropdown on outside click
+  useEffect(() => {
+    if (!isNewsDropdownOpen) return;
+
+    const handleOutside = (e) => {
+      if (newsDropdownRef.current && !newsDropdownRef.current.contains(e.target)) {
+        setIsNewsDropdownOpen(false);
+      }
+    };
+
+    const handleScroll = () => setIsNewsDropdownOpen(false);
+
+    document.addEventListener("mousedown", handleOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isNewsDropdownOpen]);
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 w-full">
@@ -90,19 +127,54 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-6">
+          <nav className="hidden lg:flex items-center space-x-6">
             <Link to="/home" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Home
             </Link>
-            <Link to="/sports" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              Sport
-            </Link>
-            <Link to="/business" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              Business
-            </Link>
-            <Link to="/entertainment" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              Entertainment
-            </Link>
+            
+            {/* News Dropdown */}
+            <div className="relative" ref={newsDropdownRef}>
+              <button
+                onClick={toggleNewsDropdown}
+                className="flex items-center gap-1.5 text-gray-700 hover:text-blue-600 font-medium transition group"
+              >
+                <FaNewspaper className="text-sm" />
+                <span>News</span>
+                <FaChevronDown className={`text-xs transition-transform duration-300 ${isNewsDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isNewsDropdownOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 animate-[fadeIn_0.2s_ease-out]">
+                  {/* Arrow */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45"></div>
+                  
+                  <div className="relative bg-white rounded-xl">
+                    {newsCategories.map((category, index) => {
+                      const Icon = category.icon;
+                      return (
+                        <Link
+                          key={category.name}
+                          to={category.path}
+                          onClick={() => setIsNewsDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all group/item ${
+                            index !== newsCategories.length - 1 ? 'border-b border-gray-50' : ''
+                          }`}
+                        >
+                          <div className={`w-8 h-8 rounded-lg bg-gray-50 group-hover/item:bg-white flex items-center justify-center transition-all shadow-sm`}>
+                            <Icon className={`${category.color} text-sm`} />
+                          </div>
+                          <span className="text-gray-700 font-medium group-hover/item:text-blue-600 transition">
+                            {category.name}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <Link to="/contac" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Contact Us
             </Link>
@@ -298,39 +370,41 @@ export default function Header() {
                   <span>Home</span>
                 </Link>
 
-                {/* Categories Section */}
-                <div className="pt-4 pb-2">
-                  <p className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Categories
-                  </p>
+                {/* News Dropdown (Mobile) */}
+                <div className="mt-2">
+                  <button
+                    onClick={() => setIsMobileNewsOpen(!isMobileNewsOpen)}
+                    className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FaNewspaper className="text-lg text-blue-500" />
+                      <span>News</span>
+                    </div>
+                    <FaChevronDown className={`text-sm transition-transform duration-300 ${isMobileNewsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Mobile News Categories */}
+                  <div className={`overflow-hidden transition-all duration-300 ${isMobileNewsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-blue-100 pl-2">
+                      {newsCategories.map((category) => {
+                        const Icon = category.icon;
+                        return (
+                          <Link
+                            key={category.name}
+                            to={category.path}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent hover:text-blue-600 font-medium transition"
+                            onClick={closeMenu}
+                          >
+                            <div className={`w-7 h-7 rounded-md bg-gray-50 flex items-center justify-center`}>
+                              <Icon className={`${category.color} text-sm`} />
+                            </div>
+                            <span className="text-sm">{category.name}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
-
-                <Link
-                  to="/sports"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition"
-                  onClick={closeMenu}
-                >
-                  <FaFootballBall className="text-lg" />
-                  <span>Sport</span>
-                </Link>
-
-                <Link
-                  to="/business"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition"
-                  onClick={closeMenu}
-                >
-                  <FaBriefcase className="text-lg" />
-                  <span>Business</span>
-                </Link>
-
-                <Link
-                  to="/entertainment"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition"
-                  onClick={closeMenu}
-                >
-                  <FaFilm className="text-lg" />
-                  <span>Entertainment</span>
-                </Link>
 
                 {/* Other Section */}
                 <div className="pt-4 pb-2">

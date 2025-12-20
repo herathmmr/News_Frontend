@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import Sport from "./sports";
 import Business from "./business";
 import Entertainment from "./entertainment";
+import Politics from "./politics";
+import Technology from "./technology";
 import Contact from "./contac";
 import About from "./about";
 import ErrorNotFound from "./error";
@@ -21,6 +23,8 @@ export default function HomePage() {
           <Route path="/sports" element={<Sport />} />
           <Route path="/business" element={<Business />} />
           <Route path="/entertainment" element={<Entertainment />} />
+          <Route path="/politics" element={<Politics />} />
+          <Route path="/technology" element={<Technology />} />
           <Route path="/contac" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/home" element={<Home />} />
