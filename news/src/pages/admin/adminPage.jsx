@@ -5,6 +5,10 @@ import AdminNews from "./adminNews";
 import AddNews from "./addnews";
 import EditNews from "./editnews";
 import AdminUsers from "./adminUsers";
+import AdminJobs from "./adminJobs";
+import AddJob from "./addJob";
+import EditJob from "./editJob";
+import { MdWork } from "react-icons/md";
 
 export default function AdminPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -54,6 +58,14 @@ export default function AdminPage() {
             📰 News
           </Link>
           <Link
+            to="/admin/jobs"
+            onClick={closeSidebar}
+            className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 rounded-lg hover:bg-emerald-100 hover:text-emerald-700 transition"
+          >
+            <MdWork className="text-lg" />
+            Jobs
+          </Link>
+          <Link
             to="/admin/users"
             onClick={closeSidebar}
             className="w-full flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-green-100 hover:text-green-700 transition"
@@ -77,12 +89,15 @@ export default function AdminPage() {
           Welcome, Admin 👋
         </h2>
         <p className="mt-2 text-gray-600">
-          Here you can manage users, news articles, and dashboard stats.
+          Here you can manage users, news articles, jobs, and dashboard stats.
         </p>
         <Routes path="/*">
           <Route path="/news" element={<AdminNews />} />
           <Route path="/news/add" element={<AddNews />} />
           <Route path="/news/edit" element={<EditNews />} />
+          <Route path="/jobs" element={<AdminJobs />} />
+          <Route path="/jobs/add" element={<AddJob />} />
+          <Route path="/jobs/edit" element={<EditJob />} />
           <Route path="/users" element={<AdminUsers />} />
         </Routes>
       </div>

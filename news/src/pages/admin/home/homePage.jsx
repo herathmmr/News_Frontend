@@ -12,6 +12,9 @@ import ErrorNotFound from "./error";
 import Home from "./home";
 import Footer from "../../../../components/footer";
 import NewsOver from "./newsOverview";
+import GovernmentJobs from "./governmentJobs";
+import PrivateJobs from "./privateJobs";
+import JobOverview from "./jobOverview";
 
 export default function HomePage() {
   return (
@@ -29,6 +32,9 @@ export default function HomePage() {
           <Route path="/about" element={<About />} />
           <Route path="/home" element={<Home />} />
           <Route path="/newsov/:id" element={<NewsOver />} />
+          <Route path="/jobs/government" element={<GovernmentJobs />} />
+          <Route path="/jobs/private" element={<PrivateJobs />} />
+          <Route path="/jobs/:id" element={<JobOverview />} />
           <Route path="/" element={<Home />} />
           <Route path="*" element={<ErrorNotFound />} />
         </Routes>

@@ -1,29 +1,35 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt, FaNewspaper, FaLandmark, FaLaptop } from "react-icons/fa";
+import { FaHome, FaFootballBall, FaBriefcase, FaFilm, FaEnvelope, FaInfoCircle, FaSignOutAlt, FaNewspaper, FaLandmark, FaLaptop, FaBuilding, FaUserTie } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
+import { MdWork } from "react-icons/md";
 import toast from "react-hot-toast";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNewsDropdownOpen, setIsNewsDropdownOpen] = useState(false);
+  const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
   const [isMobileNewsOpen, setIsMobileNewsOpen] = useState(false);
+  const [isMobileJobsOpen, setIsMobileJobsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const profileRef = useRef(null);
   const newsDropdownRef = useRef(null);
+  const jobsDropdownRef = useRef(null);
   const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => {
     setIsMenuOpen(false);
     setIsMobileNewsOpen(false);
+    setIsMobileJobsOpen(false);
   };
   const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
   const toggleNewsDropdown = () => setIsNewsDropdownOpen(!isNewsDropdownOpen);
+  const toggleJobsDropdown = () => setIsJobsDropdownOpen(!isJobsDropdownOpen);
 
   const newsCategories = [
     { name: "Sports", path: "/sports", icon: FaFootballBall, color: "text-green-500" },
@@ -31,6 +37,11 @@ export default function Header() {
     { name: "Entertainment", path: "/entertainment", icon: FaFilm, color: "text-purple-500" },
     { name: "Politics", path: "/politics", icon: FaLandmark, color: "text-red-500" },
     { name: "Technology", path: "/technology", icon: FaLaptop, color: "text-cyan-500" },
+  ];
+
+  const jobCategories = [
+    { name: "Government Jobs", path: "/jobs/government", icon: FaBuilding, color: "text-emerald-600", description: "Public sector opportunities" },
+    { name: "Private Jobs", path: "/jobs/private", icon: FaUserTie, color: "text-indigo-600", description: "Private sector careers" },
   ];
 
   // Check if user is logged in and decode token
@@ -90,6 +101,7 @@ export default function Header() {
   useEffect(() => {
     setIsProfileOpen(false);
     setIsNewsDropdownOpen(false);
+    setIsJobsDropdownOpen(false);
   }, [location.pathname]);
 
   // Close news dropdown on outside click
@@ -112,6 +124,27 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [isNewsDropdownOpen]);
+
+  // Close jobs dropdown on outside click
+  useEffect(() => {
+    if (!isJobsDropdownOpen) return;
+
+    const handleOutside = (e) => {
+      if (jobsDropdownRef.current && !jobsDropdownRef.current.contains(e.target)) {
+        setIsJobsDropdownOpen(false);
+      }
+    };
+
+    const handleScroll = () => setIsJobsDropdownOpen(false);
+
+    document.addEventListener("mousedown", handleOutside);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isJobsDropdownOpen]);
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 w-full">
@@ -167,6 +200,65 @@ export default function Header() {
                           <span className="text-gray-700 font-medium group-hover/item:text-blue-600 transition">
                             {category.name}
                           </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Jobs Dropdown */}
+            <div className="relative" ref={jobsDropdownRef}>
+              <button
+                onClick={toggleJobsDropdown}
+                className="flex items-center gap-1.5 text-gray-700 hover:text-emerald-600 font-medium transition group"
+              >
+                <MdWork className="text-sm" />
+                <span>Jobs</span>
+                <FaChevronDown className={`text-xs transition-transform duration-300 ${isJobsDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Jobs Dropdown Menu */}
+              {isJobsDropdownOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 animate-[fadeIn_0.2s_ease-out]">
+                  {/* Arrow */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45"></div>
+                  
+                  {/* Header */}
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm">
+                        <MdWork className="text-white text-sm" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-800 text-sm">Find Your Career</h3>
+                        <p className="text-xs text-gray-500">Explore opportunities</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="relative bg-white rounded-xl py-1">
+                    {jobCategories.map((category, index) => {
+                      const Icon = category.icon;
+                      return (
+                        <Link
+                          key={category.name}
+                          to={category.path}
+                          onClick={() => setIsJobsDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent transition-all group/item ${
+                            index !== jobCategories.length - 1 ? 'border-b border-gray-50' : ''
+                          }`}
+                        >
+                          <div className={`w-10 h-10 rounded-xl bg-gray-50 group-hover/item:bg-white flex items-center justify-center transition-all shadow-sm border border-gray-100`}>
+                            <Icon className={`${category.color} text-lg`} />
+                          </div>
+                          <div className="flex-1">
+                            <span className="text-gray-700 font-medium group-hover/item:text-emerald-600 transition block">
+                              {category.name}
+                            </span>
+                            <span className="text-xs text-gray-400">{category.description}</span>
+                          </div>
                         </Link>
                       );
                     })}
@@ -399,6 +491,45 @@ export default function Header() {
                               <Icon className={`${category.color} text-sm`} />
                             </div>
                             <span className="text-sm">{category.name}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Jobs Dropdown (Mobile) */}
+                <div className="mt-2">
+                  <button
+                    onClick={() => setIsMobileJobsOpen(!isMobileJobsOpen)}
+                    className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 font-medium transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <MdWork className="text-lg text-emerald-500" />
+                      <span>Jobs</span>
+                    </div>
+                    <FaChevronDown className={`text-sm transition-transform duration-300 ${isMobileJobsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Mobile Jobs Categories */}
+                  <div className={`overflow-hidden transition-all duration-300 ${isMobileJobsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-emerald-100 pl-2">
+                      {jobCategories.map((category) => {
+                        const Icon = category.icon;
+                        return (
+                          <Link
+                            key={category.name}
+                            to={category.path}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-transparent hover:text-emerald-600 font-medium transition"
+                            onClick={closeMenu}
+                          >
+                            <div className={`w-8 h-8 rounded-md bg-gray-50 flex items-center justify-center`}>
+                              <Icon className={`${category.color} text-sm`} />
+                            </div>
+                            <div className="flex-1">
+                              <span className="text-sm block">{category.name}</span>
+                              <span className="text-xs text-gray-400">{category.description}</span>
+                            </div>
                           </Link>
                         );
                       })}
