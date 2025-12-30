@@ -191,7 +191,7 @@ export default function Home() {
               {/* Right - Featured News Card */}
               {featuredNews && (
                 <div className="lg:w-96 xl:w-[420px]">
-                  <Link to={`/newsov/${featuredNews._id}`} className="block group">
+                  <Link to={`/newsov/${featuredNews._id}`} state={{ news: featuredNews }} className="block group">
                     <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                       <img
                         src={featuredNews.image || "https://via.placeholder.com/400x300"}
@@ -284,6 +284,7 @@ export default function Home() {
                     <Link
                       key={article._id}
                       to={`/newsov/${article._id}`}
+                      state={{ news: article }}
                       className="group flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition"
                     >
                       <span className="text-4xl font-bold text-gray-200 group-hover:text-blue-500 transition">
