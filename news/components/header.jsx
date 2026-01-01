@@ -345,11 +345,11 @@ export default function Header() {
                         </Link>
                       )}
                       <Link
-                        to="/home"
+                        to="/my-saves"
                         onClick={() => setIsProfileOpen(false)}
-                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition text-sm font-medium"
+                        className="block px-4 py-2 text-gray-700 hover:bg-amber-50 transition text-sm font-medium"
                       >
-                        🏠 My News Feed
+                        📌 My Save List
                       </Link>
                     </div>
 
@@ -576,6 +576,13 @@ export default function Header() {
                         📊 Admin Panel
                       </Link>
                     )}
+                    <Link
+                      to="/my-saves"
+                      onClick={closeMenu}
+                      className="block w-full px-4 py-3 rounded-lg bg-amber-500 text-white text-center font-semibold hover:bg-amber-600 transition"
+                    >
+                      📌 My Save List
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-red-600 text-white text-center font-semibold hover:bg-red-700 transition"

@@ -15,6 +15,7 @@ import NewsOver from "./newsOverview";
 import GovernmentJobs from "./governmentJobs";
 import PrivateJobs from "./privateJobs";
 import JobOverview from "./jobOverview";
+import SaveList from "./saveList";
 
 export default function HomePage() {
   return (
@@ -35,6 +36,7 @@ export default function HomePage() {
           <Route path="/jobs/government" element={<GovernmentJobs />} />
           <Route path="/jobs/private" element={<PrivateJobs />} />
           <Route path="/jobs/:id" element={<JobOverview />} />
+          <Route path="/my-saves" element={<SaveList />} />
           <Route path="/" element={<Home />} />
           <Route path="*" element={<ErrorNotFound />} />
         </Routes>

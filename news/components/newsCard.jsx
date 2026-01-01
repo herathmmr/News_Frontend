@@ -1,16 +1,26 @@
 import { useState, useEffect } from "react";
-import { FaThumbsUp } from "react-icons/fa";
+import { FaThumbsUp, FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function NewsCard({ news }) {
   const [likes, setLikes] = useState(news.likes || 0);
   const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
+
+  // Check if news is saved on mount
+  useEffect(() => {
+    if (news._id) {
+      const savedNews = JSON.parse(localStorage.getItem("savedNews") || "[]");
+      setIsSaved(savedNews.some(item => item._id === news._id));
+    }
+  }, [news._id]);
 
   // Fetch like status on component mount
   useEffect(() => {
@@ -74,6 +84,40 @@ export default function NewsCard({ news }) {
     }
   };
 
+  const handleSave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    const savedNews = JSON.parse(localStorage.getItem("savedNews") || "[]");
+    
+    if (isSaved) {
+      const updatedNews = savedNews.filter(item => item._id !== news._id);
+      localStorage.setItem("savedNews", JSON.stringify(updatedNews));
+      setIsSaved(false);
+      toast.success("Removed from saved list");
+    } else {
+      const newsToSave = {
+        _id: news._id,
+        title: news.title,
+        content: news.content,
+        author: news.author,
+        category: news.category,
+        image: news.image,
+        date: news.date,
+        savedAt: new Date().toISOString()
+      };
+      savedNews.push(newsToSave);
+      localStorage.setItem("savedNews", JSON.stringify(savedNews));
+      setIsSaved(true);
+      toast.success("Added to saved list!");
+    }
+  };
+
   return (
     <>
       {showLoginModal && (
@@ -83,10 +127,10 @@ export default function NewsCard({ news }) {
           <div className="relative z-10 max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden mx-auto">
             <div className="p-6 sm:p-8 text-center">
               <div className="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-red-50 text-red-600">
-                <FaThumbsUp className="w-6 h-6" />
+                <FaBookmark className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Please sign in to like</h3>
-              <p className="text-sm text-slate-500 mb-6 px-2">You need an account to like articles. Sign in to save favorites and interact with content.</p>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Sign in required</h3>
+              <p className="text-sm text-slate-500 mb-6 px-2">You need an account to like and save articles. Sign in to interact with content.</p>
 
               <div className="flex gap-3 justify-center px-2">
                 <button
@@ -158,6 +202,23 @@ export default function NewsCard({ news }) {
         >
           <FaThumbsUp className={`text-sm transition-transform ${isLiked ? 'scale-110' : ''}`} />
           <span className="text-xs font-medium">{likes}</span>
+        </button>
+
+        {/* Save button */}
+        <button
+          onClick={handleSave}
+          className={`
+            absolute top-3 right-20 z-10
+            flex items-center justify-center rounded-full
+            w-8 h-8 shadow-sm transition-all duration-300
+            ${isSaved 
+              ? 'bg-amber-500 text-white border-amber-500' 
+              : 'bg-white/95 border border-gray-200 text-gray-700 hover:text-amber-600 hover:border-amber-400'
+            }
+          `}
+          title={isSaved ? "Remove from saved" : "Save for later"}
+        >
+          {isSaved ? <FaBookmark className="text-sm" /> : <FaRegBookmark className="text-sm" />}
         </button>
       </div>
 

@@ -3,9 +3,10 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { 
   FaBuilding, FaUserTie, FaMapMarkerAlt, FaMoneyBillWave, FaCalendarAlt, 
-  FaClock, FaArrowLeft, FaShare, FaBookmark, FaCheckCircle, FaClipboardList 
+  FaClock, FaArrowLeft, FaShare, FaBookmark, FaRegBookmark, FaCheckCircle, FaClipboardList 
 } from "react-icons/fa";
 import { MdWork, MdBusinessCenter } from "react-icons/md";
+import toast from "react-hot-toast";
 
 export default function JobOverview() {
   const { id } = useParams();
@@ -13,6 +14,18 @@ export default function JobOverview() {
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const token = localStorage.getItem("token");
+
+  // Check if job is saved
+  useEffect(() => {
+    if (id) {
+      const savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
+      setIsSaved(savedJobs.some(item => item._id === id));
+    }
+  }, [id]);
 
   useEffect(() => {
     fetchJob();
@@ -55,7 +68,42 @@ export default function JobOverview() {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!");
+    }
+  };
+
+  const handleSave = () => {
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    const savedJobs = JSON.parse(localStorage.getItem("savedJobs") || "[]");
+    
+    if (isSaved) {
+      // Remove from saved
+      const updatedJobs = savedJobs.filter(item => item._id !== job._id);
+      localStorage.setItem("savedJobs", JSON.stringify(updatedJobs));
+      setIsSaved(false);
+      toast.success("Removed from saved list");
+    } else {
+      // Add to saved
+      const jobToSave = {
+        _id: job._id,
+        title: job.title,
+        company: job.company,
+        description: job.description,
+        category: job.category,
+        location: job.location,
+        salary: job.salary,
+        image: job.image,
+        closingDate: job.closingDate,
+        savedAt: new Date().toISOString()
+      };
+      savedJobs.push(jobToSave);
+      localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+      setIsSaved(true);
+      toast.success("Added to saved list!");
     }
   };
 
@@ -185,9 +233,16 @@ export default function JobOverview() {
                 <FaShare />
                 <span className="hidden sm:inline">Share</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition font-medium backdrop-blur-sm">
-                <FaBookmark />
-                <span className="hidden sm:inline">Save</span>
+              <button 
+                onClick={handleSave}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition font-medium backdrop-blur-sm ${
+                  isSaved 
+                    ? 'bg-amber-500 hover:bg-amber-600 text-white' 
+                    : 'bg-white/10 hover:bg-white/20 text-white'
+                }`}
+              >
+                {isSaved ? <FaBookmark className="text-white" /> : <FaRegBookmark />}
+                <span className="hidden sm:inline">{isSaved ? 'Saved' : 'Save'}</span>
               </button>
             </div>
           </div>
@@ -362,6 +417,46 @@ export default function JobOverview() {
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowLoginModal(false)}></div>
+
+          <div className="relative z-10 max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden mx-auto">
+            <div className={`h-2 bg-gradient-to-r ${isGovernment ? 'from-emerald-500 to-teal-500' : 'from-indigo-500 to-purple-500'}`}></div>
+            <div className="p-6 sm:p-8 text-center">
+              <div className={`mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full ${isGovernment ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'}`}>
+                <FaBookmark className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Sign in to save jobs</h3>
+              <p className="text-sm text-slate-500 mb-6 px-2">
+                You need an account to save job listings. Sign in to build your career wishlist.
+              </p>
+
+              <div className="flex gap-3 justify-center px-2">
+                <button
+                  onClick={() => { setShowLoginModal(false); navigate('/login'); }}
+                  className={`inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-semibold transition shadow-md ${
+                    isGovernment 
+                      ? 'bg-emerald-500 text-white hover:bg-emerald-600' 
+                      : 'bg-indigo-500 text-white hover:bg-indigo-600'
+                  }`}
+                >
+                  Sign in
+                </button>
+
+                <button
+                  onClick={() => setShowLoginModal(false)}
+                  className="inline-flex items-center justify-center bg-gray-100 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-200 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

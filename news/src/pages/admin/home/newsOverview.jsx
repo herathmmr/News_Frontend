@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
-import { FaFacebook, FaWhatsapp, FaArrowLeft, FaShare, FaBookmark, FaCalendarAlt, FaUser, FaClock } from "react-icons/fa";
+import { FaFacebook, FaWhatsapp, FaArrowLeft, FaShare, FaBookmark, FaRegBookmark, FaCalendarAlt, FaUser, FaClock, FaCheck } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { MdArticle, MdCategory } from "react-icons/md";
+import toast from "react-hot-toast";
 
 export default function NewsOver() {
   const { id } = useParams();
@@ -14,6 +15,18 @@ export default function NewsOver() {
   const [news, setNews] = useState(newsFromState || null);
   const [loading, setLoading] = useState(!newsFromState);
   const [error, setError] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const token = localStorage.getItem("token");
+
+  // Check if news is saved
+  useEffect(() => {
+    if (id) {
+      const savedNews = JSON.parse(localStorage.getItem("savedNews") || "[]");
+      setIsSaved(savedNews.some(item => item._id === id));
+    }
+  }, [id]);
 
   useEffect(() => {
     // Only fetch from API if news wasn't passed via state
@@ -55,7 +68,40 @@ export default function NewsOver() {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!");
+    }
+  };
+
+  const handleSave = () => {
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    const savedNews = JSON.parse(localStorage.getItem("savedNews") || "[]");
+    
+    if (isSaved) {
+      // Remove from saved
+      const updatedNews = savedNews.filter(item => item._id !== news._id);
+      localStorage.setItem("savedNews", JSON.stringify(updatedNews));
+      setIsSaved(false);
+      toast.success("Removed from saved list");
+    } else {
+      // Add to saved
+      const newsToSave = {
+        _id: news._id,
+        title: news.title,
+        content: news.content,
+        author: news.author,
+        category: news.category,
+        image: news.image,
+        date: news.date,
+        savedAt: new Date().toISOString()
+      };
+      savedNews.push(newsToSave);
+      localStorage.setItem("savedNews", JSON.stringify(savedNews));
+      setIsSaved(true);
+      toast.success("Added to saved list!");
     }
   };
 
@@ -190,9 +236,16 @@ export default function NewsOver() {
                 <FaShare />
                 <span className="hidden sm:inline">Share</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition font-medium backdrop-blur-sm">
-                <FaBookmark />
-                <span className="hidden sm:inline">Save</span>
+              <button 
+                onClick={handleSave}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition font-medium backdrop-blur-sm ${
+                  isSaved 
+                    ? 'bg-amber-500 hover:bg-amber-600 text-white' 
+                    : 'bg-white/10 hover:bg-white/20 text-white'
+                }`}
+              >
+                {isSaved ? <FaBookmark className="text-white" /> : <FaRegBookmark />}
+                <span className="hidden sm:inline">{isSaved ? 'Saved' : 'Save'}</span>
               </button>
             </div>
           </div>
@@ -320,6 +373,42 @@ export default function NewsOver() {
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowLoginModal(false)}></div>
+
+          <div className="relative z-10 max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden mx-auto">
+            <div className="h-2 bg-gradient-to-r from-amber-500 to-orange-500"></div>
+            <div className="p-6 sm:p-8 text-center">
+              <div className="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-amber-50 text-amber-600">
+                <FaBookmark className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Sign in to save articles</h3>
+              <p className="text-sm text-slate-500 mb-6 px-2">
+                You need an account to save articles to your collection. Sign in to start building your personal reading list.
+              </p>
+
+              <div className="flex gap-3 justify-center px-2">
+                <button
+                  onClick={() => { setShowLoginModal(false); navigate('/login'); }}
+                  className="inline-flex items-center justify-center bg-amber-500 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-amber-600 transition shadow-md"
+                >
+                  Sign in
+                </button>
+
+                <button
+                  onClick={() => setShowLoginModal(false)}
+                  className="inline-flex items-center justify-center bg-gray-100 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-200 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
