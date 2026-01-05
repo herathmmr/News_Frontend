@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -41,10 +41,6 @@ export default function LoginPage() {
     window.location.href = "http://localhost:3005/api/auth/google";
   };
 
-  const handleFacebookAuth = () => {
-    window.location.href = "http://localhost:3005/api/auth/facebook";
-  };
-
   return (
     <section
       className="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-70 bg-blend-overlay py-8"
@@ -69,15 +65,6 @@ export default function LoginPage() {
           >
             <FaGoogle className="text-red-500 text-xl" />
             Continue with Google
-          </button>
-
-          <button
-            onClick={handleFacebookAuth}
-            type="button"
-            className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 hover:shadow-md transition font-medium"
-          >
-            <FaFacebook className="text-xl" />
-            Continue with Facebook
           </button>
         </div>
 
