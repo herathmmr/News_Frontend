@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import NewsCard from "../../../../components/newsCard";
+import LanguageSwitcher from "../../../../components/LanguageSwitcher";
 import { 
   FaSearch, FaNewspaper, FaBuilding, FaUserTie, FaMapMarkerAlt, 
   FaCalendarAlt, FaArrowRight, FaClock, FaFire, FaTrophy,
@@ -11,31 +13,32 @@ import {
 import { MdWork, MdTrendingUp } from "react-icons/md";
 import { HiSparkles } from "react-icons/hi";
 
-const CATEGORIES = ["All", "Sports", "Business", "Entertainment", "Politics", "Technology"];
+const CATEGORY_KEYS = ["all", "sports", "business", "entertainment", "politics", "technology"];
 
 const CATEGORY_ICONS = {
-  Sports: FaFootballBall,
-  Business: FaBriefcase,
-  Entertainment: FaFilm,
-  Politics: FaLandmark,
-  Technology: FaLaptop
+  sports: FaFootballBall,
+  business: FaBriefcase,
+  entertainment: FaFilm,
+  politics: FaLandmark,
+  technology: FaLaptop
 };
 
 const CATEGORY_COLORS = {
-  Sports: "from-green-500 to-emerald-600",
-  Business: "from-blue-500 to-indigo-600",
-  Entertainment: "from-purple-500 to-pink-600",
-  Politics: "from-red-500 to-rose-600",
-  Technology: "from-cyan-500 to-blue-600"
+  sports: "from-green-500 to-emerald-600",
+  business: "from-blue-500 to-indigo-600",
+  entertainment: "from-purple-500 to-pink-600",
+  politics: "from-red-500 to-rose-600",
+  technology: "from-cyan-500 to-blue-600"
 };
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
   const [state, setState] = useState("loading");
   const [news, setNews] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [jobsLoading, setJobsLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState("all");
   const [activeTab, setActiveTab] = useState("news");
 
   useEffect(() => {
@@ -76,13 +79,13 @@ export default function Home() {
         item.content?.toLowerCase().includes(term) ||
         item.author?.toLowerCase().includes(term);
       const matchesCategory =
-        category === "All" || item.category?.toLowerCase() === category.toLowerCase();
+        category === "all" || item.category?.toLowerCase() === category.toLowerCase();
       return matchesTerm && matchesCategory;
     });
   }, [news, search, category]);
 
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
+    return new Date(date).toLocaleDateString(i18n.language === 'si' ? 'si-LK' : 'en-US', {
       month: 'short',
       day: 'numeric'
     });
@@ -120,24 +123,29 @@ export default function Home() {
           </div>
 
           <div className="relative p-6 sm:p-10 lg:p-12">
+            {/* Language Switcher */}
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10">
+              <LanguageSwitcher />
+            </div>
+
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               {/* Left Content */}
               <div className="flex-1 space-y-6">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
                   <HiSparkles className="text-yellow-400" />
-                  <span className="text-sm font-medium text-white/90">Your Daily Digest</span>
+                  <span className="text-sm font-medium text-white/90">{t('home.yourDailyDigest')}</span>
                 </div>
                 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
-                  Stay Informed,
+                  {t('home.stayInformed')}
                   <br />
                   <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    Stay Ahead
+                    {t('home.stayAhead')}
                   </span>
                 </h1>
                 
                 <p className="text-lg text-white/70 max-w-xl">
-                  Discover the latest news, explore career opportunities, and stay connected with what matters most.
+                  {t('home.heroDescription')}
                 </p>
 
                 {/* Search Bar */}
@@ -147,12 +155,12 @@ export default function Home() {
                     <input
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Search news, topics, jobs..."
+                      placeholder={t('home.searchPlaceholder')}
                       className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition"
                     />
                   </div>
                   <button className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300">
-                    Search
+                    {t('common.search')}
                   </button>
                 </div>
 
@@ -164,7 +172,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{news.length}+</p>
-                      <p className="text-xs text-white/60">Articles</p>
+                      <p className="text-xs text-white/60">{t('common.articles')}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -173,7 +181,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{jobs.length}+</p>
-                      <p className="text-xs text-white/60">Active Jobs</p>
+                      <p className="text-xs text-white/60">{t('common.activeJobs')}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -182,7 +190,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">24/7</p>
-                      <p className="text-xs text-white/60">Updates</p>
+                      <p className="text-xs text-white/60">{t('common.updates')}</p>
                     </div>
                   </div>
                 </div>
@@ -202,7 +210,7 @@ export default function Home() {
                       <div className="absolute bottom-0 left-0 right-0 p-6">
                         <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-full mb-3">
                           <FaFire className="text-xs" />
-                          Featured
+                          {t('home.featured')}
                         </span>
                         <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-blue-300 transition">
                           {featuredNews.title}
@@ -228,7 +236,7 @@ export default function Home() {
             }`}
           >
             <FaNewspaper />
-            News
+            {t('tabs.news')}
           </button>
           <button
             onClick={() => setActiveTab("jobs")}
@@ -239,7 +247,7 @@ export default function Home() {
             }`}
           >
             <MdWork />
-            Jobs
+            {t('tabs.jobs')}
           </button>
         </div>
 
@@ -248,35 +256,35 @@ export default function Home() {
           <div className="space-y-8">
             {/* Category Filters */}
             <div className="flex flex-wrap justify-center gap-3">
-              {CATEGORIES.map((cat) => {
-                const Icon = CATEGORY_ICONS[cat];
+              {CATEGORY_KEYS.map((catKey) => {
+                const Icon = CATEGORY_ICONS[catKey];
                 return (
                   <button
-                    key={cat}
-                    onClick={() => setCategory(cat)}
+                    key={catKey}
+                    onClick={() => setCategory(catKey)}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                      category === cat
-                        ? `bg-gradient-to-r ${CATEGORY_COLORS[cat] || "from-blue-500 to-purple-600"} text-white shadow-lg`
+                      category === catKey
+                        ? `bg-gradient-to-r ${CATEGORY_COLORS[catKey] || "from-blue-500 to-purple-600"} text-white shadow-lg`
                         : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:shadow-md"
                     }`}
                   >
                     {Icon && <Icon className="text-xs" />}
-                    {cat}
+                    {t(`categories.${catKey}`)}
                   </button>
                 );
               })}
             </div>
 
             {/* Trending Section */}
-            {trendingNews.length > 0 && category === "All" && !search && (
+            {trendingNews.length > 0 && category === "all" && !search && (
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
                     <FaTrophy className="text-white" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-800">Trending Now</h2>
-                    <p className="text-sm text-gray-500">Most popular stories today</p>
+                    <h2 className="text-xl font-bold text-gray-800">{t('trending.title')}</h2>
+                    <p className="text-sm text-gray-500">{t('trending.subtitle')}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -335,13 +343,13 @@ export default function Home() {
                     <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FaNewspaper className="text-3xl text-red-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Failed to Load News</h3>
-                    <p className="text-gray-500 mb-6">Something went wrong. Please try again.</p>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{t('errors.failedToLoad')}</h3>
+                    <p className="text-gray-500 mb-6">{t('errors.somethingWrong')}</p>
                     <button
                       onClick={() => setState("loading")}
                       className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-semibold shadow-lg"
                     >
-                      Try Again
+                      {t('common.tryAgain')}
                     </button>
                   </div>
                 </div>
@@ -353,8 +361,8 @@ export default function Home() {
                     <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FaSearch className="text-3xl text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2">No Results Found</h3>
-                    <p className="text-gray-500">Try adjusting your search or filter to find what you're looking for.</p>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{t('errors.noResults')}</h3>
+                    <p className="text-gray-500">{t('errors.adjustSearch')}</p>
                   </div>
                 </div>
               )}
@@ -384,15 +392,15 @@ export default function Home() {
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <FaBuilding className="text-3xl" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">Government Jobs</h3>
-                  <p className="text-emerald-100 mb-6">Explore stable careers in the public sector with excellent benefits.</p>
+                  <h3 className="text-2xl font-bold mb-2">{t('jobs.governmentJobs')}</h3>
+                  <p className="text-emerald-100 mb-6">{t('jobs.governmentDescription')}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-3xl font-bold">
                       {jobs.filter(j => j.category === "government").length}
-                      <span className="text-lg font-normal text-emerald-200 ml-2">positions</span>
+                      <span className="text-lg font-normal text-emerald-200 ml-2">{t('common.positions')}</span>
                     </span>
                     <span className="flex items-center gap-2 font-semibold group-hover:gap-3 transition-all">
-                      Browse <FaArrowRight />
+                      {t('common.browse')} <FaArrowRight />
                     </span>
                   </div>
                 </div>
@@ -410,15 +418,15 @@ export default function Home() {
                   <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <FaUserTie className="text-3xl" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">Private Sector Jobs</h3>
-                  <p className="text-indigo-100 mb-6">Discover exciting opportunities in leading private companies.</p>
+                  <h3 className="text-2xl font-bold mb-2">{t('jobs.privateJobs')}</h3>
+                  <p className="text-indigo-100 mb-6">{t('jobs.privateDescription')}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-3xl font-bold">
                       {jobs.filter(j => j.category === "private").length}
-                      <span className="text-lg font-normal text-indigo-200 ml-2">positions</span>
+                      <span className="text-lg font-normal text-indigo-200 ml-2">{t('common.positions')}</span>
                     </span>
                     <span className="flex items-center gap-2 font-semibold group-hover:gap-3 transition-all">
-                      Browse <FaArrowRight />
+                      {t('common.browse')} <FaArrowRight />
                     </span>
                   </div>
                 </div>
@@ -433,15 +441,15 @@ export default function Home() {
                     <MdWork className="text-white text-2xl" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-800">Latest Opportunities</h2>
-                    <p className="text-sm text-gray-500">Fresh job postings just for you</p>
+                    <h2 className="text-xl font-bold text-gray-800">{t('jobs.latestOpportunities')}</h2>
+                    <p className="text-sm text-gray-500">{t('jobs.freshPostings')}</p>
                   </div>
                 </div>
                 <Link
                   to="/jobs/government"
                   className="hidden sm:flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-semibold transition"
                 >
-                  View All <FaArrowRight />
+                  {t('common.viewAll')} <FaArrowRight />
                 </Link>
               </div>
 
@@ -464,8 +472,8 @@ export default function Home() {
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <MdWork className="text-4xl text-gray-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">No Jobs Available</h3>
-                  <p className="text-gray-500">Check back later for new opportunities.</p>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">{t('jobs.noJobs')}</h3>
+                  <p className="text-gray-500">{t('jobs.checkBackLater')}</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -506,7 +514,7 @@ export default function Home() {
                               </h3>
                               {isUrgent && (
                                 <span className="flex-shrink-0 px-2 py-0.5 bg-red-100 text-red-600 text-xs font-medium rounded-full">
-                                  {daysRemaining}d left
+                                  {daysRemaining}{t('jobs.daysLeft')}
                                 </span>
                               )}
                             </div>
@@ -534,7 +542,7 @@ export default function Home() {
                             {job.category}
                           </span>
                           <span className="text-emerald-600 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                            Apply <FaArrowRight className="text-xs" />
+                            {t('common.apply')} <FaArrowRight className="text-xs" />
                           </span>
                         </div>
                       </Link>
@@ -548,7 +556,7 @@ export default function Home() {
                 to="/jobs/government"
                 className="sm:hidden flex items-center justify-center gap-2 mt-6 w-full py-3 bg-emerald-50 text-emerald-600 rounded-xl font-semibold hover:bg-emerald-100 transition"
               >
-                View All Jobs <FaArrowRight />
+                {t('common.viewAll')} <FaArrowRight />
               </Link>
             </div>
 
@@ -556,8 +564,8 @@ export default function Home() {
             <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-6 sm:p-8 text-white">
               <div className="flex flex-col md:flex-row md:items-center gap-6">
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold mb-2">Looking for your dream job?</h3>
-                  <p className="text-slate-300">Browse through hundreds of opportunities and find the perfect match for your skills.</p>
+                  <h3 className="text-xl font-bold mb-2">{t('jobs.dreamJob')}</h3>
+                  <p className="text-slate-300">{t('jobs.dreamJobDescription')}</p>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Link
@@ -565,14 +573,14 @@ export default function Home() {
                     className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 rounded-xl font-semibold transition shadow-lg"
                   >
                     <FaBuilding />
-                    Government Jobs
+                    {t('jobs.governmentJobs')}
                   </Link>
                   <Link
                     to="/jobs/private"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-semibold transition"
                   >
                     <FaUserTie />
-                    Private Jobs
+                    {t('jobs.privateJobs')}
                   </Link>
                 </div>
               </div>

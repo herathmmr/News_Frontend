@@ -1,0 +1,56 @@
+{
+  "common": {
+    "search": "Search",
+    "viewAll": "View All",
+    "tryAgain": "Try Again",
+    "apply": "Apply",
+    "browse": "Browse",
+    "positions": "positions",
+    "articles": "Articles",
+    "activeJobs": "Active Jobs",
+    "updates": "Updates"
+  },
+  "home": {
+    "yourDailyDigest": "Your Daily Digest",
+    "stayInformed": "Stay Informed,",
+    "stayAhead": "Stay Ahead",
+    "heroDescription": "Discover the latest news, explore career opportunities, and stay connected with what matters most.",
+    "searchPlaceholder": "Search news, topics, jobs...",
+    "featured": "Featured"
+  },
+  "categories": {
+    "all": "All",
+    "sports": "Sports",
+    "business": "Business",
+    "entertainment": "Entertainment",
+    "politics": "Politics",
+    "technology": "Technology"
+  },
+  "tabs": {
+    "news": "News",
+    "jobs": "Jobs"
+  },
+  "trending": {
+    "title": "Trending Now",
+    "subtitle": "Most popular stories today"
+  },
+  "jobs": {
+    "governmentJobs": "Government Jobs",
+    "governmentDescription": "Explore stable careers in the public sector with excellent benefits.",
+    "privateJobs": "Private Sector Jobs",
+    "privateDescription": "Discover exciting opportunities in leading private companies.",
+    "latestOpportunities": "Latest Opportunities",
+    "freshPostings": "Fresh job postings just for you",
+    "noJobs": "No Jobs Available",
+    "checkBackLater": "Check back later for new opportunities.",
+    "daysLeft": "d left",
+    "dreamJob": "Looking for your dream job?",
+    "dreamJobDescription": "Browse through hundreds of opportunities and find the perfect match for your skills."
+  },
+  "errors": {
+    "failedToLoad": "Failed to Load News",
+    "somethingWrong": "Something went wrong. Please try again.",
+    "noResults": "No Results Found",
+    "adjustSearch": "Try adjusting your search or filter to find what you're looking for."
+  }
+}
