@@ -32,13 +32,7 @@ export default function Sport() {
   }, [state]);
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50">
-      {/* Decorative soft blobs matching home page */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -right-24 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-gradient-to-tr from-amber-200 to-rose-200 opacity-40 blur-3xl"></div>
-        <div className="absolute -bottom-24 -left-24 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-gradient-to-tr from-rose-200 to-amber-200 opacity-40 blur-3xl"></div>
-      </div>
-
+    <section className="relative min-h-screen bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         {/* Page Header */}
         <div className="mb-6 sm:mb-8">

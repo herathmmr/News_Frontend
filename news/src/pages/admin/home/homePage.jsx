@@ -19,14 +19,7 @@ import SaveList from "./saveList";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-      {/* Background decorative elements */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 -left-40 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 right-1/4 w-80 h-80 bg-pink-200/20 rounded-full blur-3xl"></div>
-      </div>
-      
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
       
       <main className="flex-1 w-full pt-0">

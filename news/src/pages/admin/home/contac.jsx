@@ -8,13 +8,7 @@ export default function Contact() {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50">
-      {/* Decorative soft blobs matching home page */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -right-24 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-gradient-to-tr from-amber-200 to-rose-200 opacity-40 blur-3xl"></div>
-        <div className="absolute -bottom-24 -left-24 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-gradient-to-tr from-rose-200 to-amber-200 opacity-40 blur-3xl"></div>
-      </div>
-
+    <section className="relative min-h-screen bg-white">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         {/* Page Header */}
         <div className="mb-6 sm:mb-8">
@@ -27,7 +21,7 @@ export default function Contact() {
         </div>
 
         {/* Main Card */}
-        <div className="bg-white/95 rounded-3xl shadow-xl overflow-hidden ring-1 ring-black/5 p-5 sm:p-8 lg:p-10">
+        <div className="bg-white rounded-3xl shadow-lg overflow-hidden ring-1 ring-gray-200 p-5 sm:p-8 lg:p-10">
           {/* Decorative top bar */}
           <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-600 via-rose-500 to-amber-400"></div>
 

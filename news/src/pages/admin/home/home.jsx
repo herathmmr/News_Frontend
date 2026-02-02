@@ -24,11 +24,11 @@ const CATEGORY_ICONS = {
 };
 
 const CATEGORY_COLORS = {
-  sports: "from-green-500 to-emerald-600",
-  business: "from-blue-500 to-indigo-600",
-  entertainment: "from-purple-500 to-pink-600",
-  politics: "from-red-500 to-rose-600",
-  technology: "from-cyan-500 to-blue-600"
+  sports: "from-red-500 to-red-600",
+  business: "from-red-500 to-red-600",
+  entertainment: "from-red-500 to-red-600",
+  politics: "from-red-500 to-red-600",
+  technology: "from-red-500 to-red-600"
 };
 
 export default function Home() {
@@ -108,14 +108,7 @@ export default function Home() {
   const trendingNews = news.slice(1, 4);
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
-      {/* Background Elements */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-br from-blue-200 to-purple-200 opacity-30 blur-3xl"></div>
-        <div className="absolute top-1/2 -left-40 h-80 w-80 rounded-full bg-gradient-to-br from-emerald-200 to-cyan-200 opacity-30 blur-3xl"></div>
-        <div className="absolute -bottom-40 right-1/3 h-80 w-80 rounded-full bg-gradient-to-br from-amber-200 to-orange-200 opacity-30 blur-3xl"></div>
-      </div>
-
+    <section className="relative min-h-screen bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 space-y-8">
         
         {/* Hero Section */}
@@ -123,8 +116,8 @@ export default function Home() {
           {/* Animated Background */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')]"></div>
-            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-500/20 to-rose-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-amber-500/20 to-orange-500/20 rounded-full blur-3xl"></div>
           </div>
 
           <div className="relative p-6 sm:p-10 lg:p-12">
@@ -144,7 +137,7 @@ export default function Home() {
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
                   {t('home.stayInformed')}
                   <br />
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-red-400 via-rose-400 to-amber-400 bg-clip-text text-transparent">
                     {t('home.stayAhead')}
                   </span>
                 </h1>
@@ -161,10 +154,10 @@ export default function Home() {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder={t('home.searchPlaceholder')}
-                      className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition"
+                      className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-red-400/50 focus:border-transparent transition"
                     />
                   </div>
-                  <button className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300">
+                  <button className="px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-2xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300">
                     {t('common.search')}
                   </button>
                 </div>
@@ -172,8 +165,8 @@ export default function Home() {
                 {/* Quick Stats */}
                 <div className="flex flex-wrap gap-6 pt-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                      <FaNewspaper className="text-blue-400" />
+                    <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                      <FaNewspaper className="text-red-400" />
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{news.length}+</p>
@@ -181,8 +174,8 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                      <MdWork className="text-emerald-400" />
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                      <MdWork className="text-amber-400" />
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{jobs.length}+</p>
@@ -190,8 +183,8 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                      <MdTrendingUp className="text-purple-400" />
+                    <div className="w-10 h-10 rounded-xl bg-slate-500/20 flex items-center justify-center">
+                      <MdTrendingUp className="text-slate-400" />
                     </div>
                     <div>
                       <p className="text-2xl font-bold">24/7</p>
@@ -217,7 +210,7 @@ export default function Home() {
                           <FaFire className="text-xs" />
                           {t('home.featured')}
                         </span>
-                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-blue-300 transition">
+                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-red-300 transition">
                           {featuredNews.title}
                         </h3>
                         <p className="text-white/70 text-sm line-clamp-2">{featuredNews.content}</p>
@@ -236,7 +229,7 @@ export default function Home() {
             onClick={() => setActiveTab("news")}
             className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
               activeTab === "news"
-                ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+                ? "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
           >
@@ -247,7 +240,7 @@ export default function Home() {
             onClick={() => setActiveTab("jobs")}
             className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
               activeTab === "jobs"
-                ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
           >
@@ -269,7 +262,7 @@ export default function Home() {
                     onClick={() => setCategory(catKey)}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                       category === catKey
-                        ? `bg-gradient-to-r ${CATEGORY_COLORS[catKey] || "from-blue-500 to-purple-600"} text-white shadow-lg`
+                        ? `bg-gradient-to-r ${CATEGORY_COLORS[catKey] || "from-red-500 to-red-600"} text-white shadow-lg`
                         : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:shadow-md"
                     }`}
                   >

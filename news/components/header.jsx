@@ -35,16 +35,16 @@ export default function Header() {
   const toggleJobsDropdown = () => setIsJobsDropdownOpen(!isJobsDropdownOpen);
 
   const newsCategories = [
-    { name: "Sports", path: "/sports", icon: FaFootballBall, color: "text-emerald-500", bg: "bg-emerald-50", hover: "hover:bg-emerald-100" },
-    { name: "Business", path: "/business", icon: FaBriefcase, color: "text-blue-500", bg: "bg-blue-50", hover: "hover:bg-blue-100" },
-    { name: "Entertainment", path: "/entertainment", icon: FaFilm, color: "text-purple-500", bg: "bg-purple-50", hover: "hover:bg-purple-100" },
-    { name: "Politics", path: "/politics", icon: FaLandmark, color: "text-rose-500", bg: "bg-rose-50", hover: "hover:bg-rose-100" },
-    { name: "Technology", path: "/technology", icon: FaLaptop, color: "text-cyan-500", bg: "bg-cyan-50", hover: "hover:bg-cyan-100" },
+    { name: "Sports", path: "/sports", icon: FaFootballBall, color: "text-red-600", bg: "bg-red-50", hover: "hover:bg-red-100" },
+    { name: "Business", path: "/business", icon: FaBriefcase, color: "text-red-600", bg: "bg-red-50", hover: "hover:bg-red-100" },
+    { name: "Entertainment", path: "/entertainment", icon: FaFilm, color: "text-red-600", bg: "bg-red-50", hover: "hover:bg-red-100" },
+    { name: "Politics", path: "/politics", icon: FaLandmark, color: "text-red-600", bg: "bg-red-50", hover: "hover:bg-red-100" },
+    { name: "Technology", path: "/technology", icon: FaLaptop, color: "text-red-600", bg: "bg-red-50", hover: "hover:bg-red-100" },
   ];
 
   const jobCategories = [
-    { name: "Government Jobs", path: "/jobs/government", icon: FaBuilding, color: "text-emerald-600", bg: "bg-emerald-50", description: "Public sector opportunities" },
-    { name: "Private Jobs", path: "/jobs/private", icon: FaUserTie, color: "text-indigo-600", bg: "bg-indigo-50", description: "Private sector careers" },
+    { name: "Government Jobs", path: "/jobs/government", icon: FaBuilding, color: "text-amber-600", bg: "bg-amber-50", description: "Public sector opportunities" },
+    { name: "Private Jobs", path: "/jobs/private", icon: FaUserTie, color: "text-amber-600", bg: "bg-amber-50", description: "Private sector careers" },
   ];
 
   // Scroll effect for header
@@ -147,13 +147,13 @@ export default function Header() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0" onClick={closeMenu}>
               <div className="relative">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/25 group-hover:shadow-red-500/40 transition-all duration-300 group-hover:scale-105">
                   <span className="text-white font-black text-lg sm:text-xl">D</span>
                 </div>
-                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></span>
+                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-amber-500 rounded-full border-2 border-white animate-pulse"></span>
               </div>
               <div className="hidden sm:block">
-                <span className="text-xl lg:text-2xl font-extrabold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Derana</span>
+                <span className="text-xl lg:text-2xl font-extrabold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">Derana</span>
                 <div className="flex items-center gap-1 -mt-0.5">
                   <HiSparkles className="text-amber-500 text-xs" />
                   <span className="text-[10px] lg:text-xs text-slate-400 font-semibold tracking-wider uppercase">News Portal</span>
@@ -166,7 +166,7 @@ export default function Header() {
               <div className="flex items-center bg-slate-100/80 rounded-full p-1.5 gap-1 border border-slate-200/50 backdrop-blur-sm">
                 <Link to="/home" className={`flex items-center gap-2 px-4 xl:px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                   isActive("/home") || isActive("/") 
-                    ? "bg-white text-blue-600 shadow-md shadow-blue-500/10" 
+                    ? "bg-white text-red-600 shadow-md shadow-red-500/10" 
                     : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                 }`}>
                   <FaHome className="text-sm" />
@@ -177,7 +177,7 @@ export default function Header() {
                 <div className="relative" ref={newsDropdownRef}>
                   <button onClick={toggleNewsDropdown} className={`flex items-center gap-2 px-4 xl:px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                     isNewsDropdownOpen 
-                      ? "bg-white text-blue-600 shadow-md shadow-blue-500/10" 
+                      ? "bg-white text-red-600 shadow-md shadow-red-500/10" 
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                   }`}>
                     <FaNewspaper className="text-sm" />
@@ -187,9 +187,9 @@ export default function Header() {
 
                   {isNewsDropdownOpen && (
                     <div className="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
-                      <div className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-slate-100">
+                      <div className="p-3 bg-gradient-to-r from-red-50 to-amber-50 border-b border-slate-100">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md">
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-md">
                             <FaNewspaper className="text-white text-sm" />
                           </div>
                           <div>
@@ -221,7 +221,7 @@ export default function Header() {
                 <div className="relative" ref={jobsDropdownRef}>
                   <button onClick={toggleJobsDropdown} className={`flex items-center gap-2 px-4 xl:px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                     isJobsDropdownOpen 
-                      ? "bg-white text-emerald-600 shadow-md shadow-emerald-500/10" 
+                      ? "bg-white text-amber-600 shadow-md shadow-amber-500/10" 
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                   }`}>
                     <MdWork className="text-base" />
@@ -231,9 +231,9 @@ export default function Header() {
 
                   {isJobsDropdownOpen && (
                     <div className="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-3 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
-                      <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-slate-100">
+                      <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-slate-100">
                         <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25">
                             <MdWork className="text-white text-xl" />
                           </div>
                           <div>
