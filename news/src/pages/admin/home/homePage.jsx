@@ -29,7 +29,7 @@ export default function HomePage() {
       
       <Header />
       
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full pt-0">
         <Routes>
           <Route path="/sports" element={<Sport />} />
           <Route path="/business" element={<Business />} />

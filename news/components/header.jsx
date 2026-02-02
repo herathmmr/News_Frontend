@@ -139,12 +139,9 @@ export default function Header() {
     <>
       <header className={`sticky top-0 z-50 w-full transition-all duration-500 ${
         isScrolled 
-          ? "bg-white/90 backdrop-blur-xl shadow-lg shadow-slate-900/5 border-b border-slate-200/50" 
-          : "bg-white/70 backdrop-blur-md"
+          ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-slate-900/5" 
+          : "bg-white/80 backdrop-blur-md"
       }`}>
-        {/* Gradient Top Bar */}
-        <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500"></div>
-        
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 sm:h-18 lg:h-20">
             {/* Logo */}
