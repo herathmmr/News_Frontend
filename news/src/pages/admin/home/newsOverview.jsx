@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
-import { FaFacebook, FaWhatsapp, FaArrowLeft, FaShare, FaBookmark, FaRegBookmark, FaCalendarAlt, FaUser, FaClock, FaCheck } from "react-icons/fa";
+import { FaFacebook, FaWhatsapp, FaArrowLeft, FaShare, FaBookmark, FaRegBookmark, FaCalendarAlt, FaUser, FaClock, FaCheck, FaFont } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { MdArticle, MdCategory } from "react-icons/md";
+import { MdArticle, MdCategory, MdTranslate, MdFormatSize } from "react-icons/md";
 import toast from "react-hot-toast";
 
 export default function NewsOver() {
@@ -17,6 +17,17 @@ export default function NewsOver() {
   const [error, setError] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  
+  // Translation state
+  const [currentLang, setCurrentLang] = useState('en');
+  const [translatedData, setTranslatedData] = useState(null);
+  const [isTranslating, setIsTranslating] = useState(false);
+  
+  // Font size state
+  const [fontSize, setFontSize] = useState(() => {
+    return localStorage.getItem('articleFontSize') || 'medium';
+  });
+  const [showFontSizeMenu, setShowFontSizeMenu] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -108,6 +119,76 @@ export default function NewsOver() {
       setIsSaved(true);
       toast.success("Added to saved list!");
     }
+  };
+
+  const translateText = async (text, langPair) => {
+    try {
+      const response = await axios.get(`https://api.mymemory.translated.net/get`, {
+        params: {
+          q: text,
+          langpair: langPair
+        }
+      });
+      return response.data.responseData.translatedText;
+    } catch (error) {
+      console.error("Translation error:", error);
+      return text; // Fallback
+    }
+  }
+
+  const handleTranslate = async () => {
+    if (currentLang === 'si') {
+      // Switch back to English
+      setCurrentLang('en');
+      toast.success("Switched to English");
+      return;
+    }
+
+    if (translatedData) {
+      // Already translated, just switch
+      setCurrentLang('si');
+      toast.success("Switched to Sinhala");
+      return;
+    }
+
+    setIsTranslating(true);
+    const toastId = toast.loading("Translating article...");
+
+    try {
+      // Note: Free API has limits, so we grab chunks. 
+      // For production, use a paid Google Translate API key.
+      const safeTitle = news.title ? news.title.substring(0, 500) : "";
+      const safeContent = news.content ? news.content.substring(0, 500) : "";
+
+      const titleTrans = await translateText(safeTitle, "en|si");
+      const contentTrans = await translateText(safeContent, "en|si");
+
+      setTranslatedData({
+        title: titleTrans,
+        content: contentTrans + (news.content && news.content.length > 500 ? "..." : "")
+      });
+      setCurrentLang('si');
+      toast.success("Translated to Sinhala", { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error("Translation failed", { id: toastId });
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  const fontSizeConfig = {
+    small: { name: 'Small', textSize: 'text-sm sm:text-base', titleSize: 'text-xl sm:text-2xl lg:text-3xl' },
+    medium: { name: 'Medium', textSize: 'text-base sm:text-lg', titleSize: 'text-2xl sm:text-3xl lg:text-4xl' },
+    large: { name: 'Large', textSize: 'text-lg sm:text-xl', titleSize: 'text-3xl sm:text-4xl lg:text-5xl' },
+    xlarge: { name: 'Extra Large', textSize: 'text-xl sm:text-2xl', titleSize: 'text-4xl sm:text-5xl lg:text-6xl' }
+  };
+
+  const handleFontSizeChange = (size) => {
+    setFontSize(size);
+    localStorage.setItem('articleFontSize', size);
+    setShowFontSizeMenu(false);
+    toast.success(`Font size: ${fontSizeConfig[size].name}`);
   };
 
   const currentUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -207,8 +288,8 @@ export default function NewsOver() {
               </div>
 
               {/* Title */}
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3">
-                {news.title}
+              <h1 className={`${fontSizeConfig[fontSize].titleSize} font-bold text-white mb-3`}>
+                {currentLang === 'si' && translatedData ? translatedData.title : news.title}
               </h1>
 
               {/* Author */}
@@ -234,6 +315,53 @@ export default function NewsOver() {
 
             {/* Action Buttons */}
             <div className="flex lg:flex-col gap-3 mt-4 lg:mt-0">
+              {/* Font Size Control */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowFontSizeMenu(!showFontSizeMenu)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition font-medium backdrop-blur-sm"
+                  title="Adjust text size"
+                >
+                  <MdFormatSize className="text-xl" />
+                  <span className="hidden sm:inline">Text Size</span>
+                </button>
+                
+                {/* Font Size Dropdown */}
+                {showFontSizeMenu && (
+                  <div className="absolute top-full mt-2 right-0 lg:right-auto lg:left-full lg:ml-2 lg:top-0 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 min-w-[180px]">
+                    <div className="p-2">
+                      <div className="text-xs font-semibold text-gray-500 px-3 py-2">Select Font Size</div>
+                      {Object.entries(fontSizeConfig).map(([key, config]) => (
+                        <button
+                          key={key}
+                          onClick={() => handleFontSizeChange(key)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg transition-all flex items-center justify-between gap-3 ${
+                            fontSize === key
+                              ? 'bg-red-50 text-red-600 font-semibold'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span className={key === 'small' ? 'text-sm' : key === 'medium' ? 'text-base' : key === 'large' ? 'text-lg' : 'text-xl'}>
+                            {config.name}
+                          </span>
+                          {fontSize === key && <FaCheck className="text-red-600" />}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <button
+                onClick={handleTranslate}
+                disabled={isTranslating}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition font-medium backdrop-blur-sm disabled:opacity-50"
+              >
+                <MdTranslate />
+                <span className="hidden sm:inline">
+                  {isTranslating ? "Translating..." : currentLang === 'en' ? "Translate to Sinhala" : "Show Original"}
+                </span>
+              </button>
               <button
                 onClick={handleShare}
                 className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition font-medium backdrop-blur-sm"
@@ -269,8 +397,10 @@ export default function NewsOver() {
                 Article
               </h2>
               <div className="prose prose-gray max-w-none">
-                <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base sm:text-lg">
-                  {news.content || "No content available. Please check back later for updates on this article."}
+                <p className={`text-gray-600 leading-relaxed whitespace-pre-line ${fontSizeConfig[fontSize].textSize}`}>
+                  {currentLang === 'si' && translatedData 
+                    ? translatedData.content 
+                    : (news.content || "No content available. Please check back later for updates on this article.")}
                 </p>
               </div>
             </div>
