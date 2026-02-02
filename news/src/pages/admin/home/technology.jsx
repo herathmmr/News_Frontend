@@ -7,6 +7,11 @@ export default function Technology() {
   const [state, setState] = useState("loading");
   const [techNews, setTechNews] = useState([]);
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     if (state === "loading") {
       axios

@@ -19,6 +19,11 @@ export default function JobOverview() {
 
   const token = localStorage.getItem("token");
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
+
   // Check if job is saved
   useEffect(() => {
     if (id) {

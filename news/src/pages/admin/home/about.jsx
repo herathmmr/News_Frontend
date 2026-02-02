@@ -1,4 +1,11 @@
+import { useEffect } from "react";
+
 export default function About() {
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-rose-50 via-white to-amber-50">
       {/* Decorative soft blobs matching home page */}

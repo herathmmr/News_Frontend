@@ -20,6 +20,11 @@ export default function NewsOver() {
 
   const token = localStorage.getItem("token");
 
+  // Scroll to top when component mounts or id changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
+
   // Check if news is saved
   useEffect(() => {
     if (id) {

@@ -7,6 +7,11 @@ export default function Politics() {
   const [state, setState] = useState("loading");
   const [politicsNews, setPoliticsNews] = useState([]);
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     if (state === "loading") {
       axios

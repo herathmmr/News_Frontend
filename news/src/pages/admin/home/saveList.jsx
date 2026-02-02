@@ -22,6 +22,11 @@ export default function SaveList() {
   const token = localStorage.getItem("token");
   const user = token ? JSON.parse(atob(token.split('.')[1])) : null;
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     loadSavedItems();
   }, []);

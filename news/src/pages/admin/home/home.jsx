@@ -41,6 +41,11 @@ export default function Home() {
   const [category, setCategory] = useState("all");
   const [activeTab, setActiveTab] = useState("news");
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     if (state === "loading") {
       axios

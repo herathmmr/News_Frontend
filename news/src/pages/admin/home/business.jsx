@@ -7,6 +7,11 @@ export default function Sport() {
   const [state, setState] = useState("loading");
   const [sportsNews, setSportsNews] = useState([]);
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     if (state === "loading") {
       axios
